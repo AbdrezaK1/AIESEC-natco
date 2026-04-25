@@ -13,7 +13,7 @@ const localCommittees = [
   'Blida',
 ]
 
-const roles = ['Delegate', 'Team Leader', 'Local Committee President', 'VP', 'EB Member', 'Alumni', 'Observer']
+const roles = ['LCVP', 'LCP', 'TL', 'Member', 'Alumni', 'EST']
 
 const fields = [
   { key: 'fullName', label: 'Full Name', placeholder: 'Your full name', type: 'text' },
