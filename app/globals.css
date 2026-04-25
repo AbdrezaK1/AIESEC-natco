@@ -1,0 +1,308 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #efe3c4;
+  --bg-secondary: #f8efd7;
+  --bg-card: rgba(255, 248, 232, 0.84);
+  --bg-card-hover: rgba(255, 247, 227, 0.94);
+  --border: rgba(107, 61, 28, 0.16);
+  --border-strong: rgba(107, 61, 28, 0.34);
+  --border-accent: rgba(227, 168, 29, 0.42);
+  --text-primary: #4d2d16;
+  --text-secondary: #6f5539;
+  --text-muted: #8d7559;
+  --brand-cream: #fff7e3;
+  --brand-sand: #e5c997;
+  --brand-gold: #ffd42d;
+  --brand-gold-deep: #e7a81d;
+  --brand-ember: #c45128;
+  --brand-moss: #7ea24f;
+  --brand-vine: #4f7a4a;
+  --brand-bark: #6a3416;
+  --brand-bark-dark: #4a230f;
+  --success: #95ba54;
+  --success-dim: rgba(149, 186, 84, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at top center, rgba(255, 240, 194, 0.52), transparent 22%),
+    radial-gradient(circle at 15% 12%, rgba(126, 162, 79, 0.16), transparent 18%),
+    linear-gradient(180deg, #f4ead0 0%, #e5cf9e 100%);
+  color: var(--text-primary);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(106, 52, 22, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(106, 52, 22, 0.3);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(106, 52, 22, 0.42);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  background: rgba(255, 250, 238, 0.9);
+  border: 3px solid #9f6c37;
+  color: var(--text-primary);
+  border-radius: 18px;
+  padding: 13px 16px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--brand-bark);
+  box-shadow: 0 0 0 4px rgba(227, 168, 29, 0.16);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #a48b6d;
+}
+
+select option {
+  background: #fff8e8;
+  color: var(--text-primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatBoard {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.45s ease both;
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 32px rgba(74, 35, 15, 0.14);
+  border-color: var(--border-accent);
+}
+
+.paper-page {
+  min-height: 100vh;
+  padding-top: 88px;
+  padding-bottom: 72px;
+  background:
+    radial-gradient(circle at top center, rgba(255, 240, 194, 0.38), transparent 20%),
+    linear-gradient(180deg, #f2e8cf 0%, #dec898 100%);
+}
+
+.paper-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.board-panel {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.45), transparent 26%),
+    linear-gradient(180deg, #f8edd6 0%, #ead8b1 100%);
+  border: 6px solid var(--brand-bark);
+  box-shadow: inset 0 0 0 3px #9f6c37, 0 22px 40px rgba(61, 33, 14, 0.16);
+  border-radius: 28px;
+  position: relative;
+}
+
+.board-panel::after {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 2px dashed rgba(107, 61, 28, 0.16);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.board-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 2px solid rgba(107, 61, 28, 0.14);
+  color: #6f4a28;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.section-kicker {
+  color: #7b5528;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+}
+
+.board-title {
+  font-family: 'Cinzel', Georgia, serif;
+  color: var(--brand-bark-dark);
+  text-transform: uppercase;
+}
+
+.logo-wordmark {
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 700;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--brand-gold);
+  -webkit-text-stroke: 7px var(--brand-bark);
+  paint-order: stroke fill;
+  text-shadow: 0 10px 0 #8d4a1d, 0 18px 28px rgba(77, 37, 16, 0.26);
+}
+
+.wood-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 13px 24px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand-gold), var(--brand-gold-deep));
+  color: var(--brand-bark-dark);
+  border: 3px solid var(--brand-bark);
+  box-shadow: 0 8px 0 #8c521c;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wood-button:disabled {
+  box-shadow: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.wood-button.alt {
+  background: #fff6df;
+  color: #5a3516;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.42);
+  border: 3px solid rgba(107, 61, 28, 0.12);
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.board-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .float-board {
+    animation: floatBoard 8s ease-in-out infinite;
+  }
+}
+
+@media (max-width: 980px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .paper-page {
+    padding-top: 82px;
+    padding-bottom: 56px;
+  }
+
+  .board-panel {
+    border-radius: 24px;
+  }
+
+  .board-panel::after {
+    inset: 12px;
+    border-radius: 16px;
+  }
+
+  .paper-container {
+    padding: 0 18px;
+  }
+}
