@@ -3,14 +3,28 @@
 
 export interface Reservation {
   id: string
+  privacyCertified: boolean
   fullName: string
+  wellbeing: string
+  age: string
   email: string
   phone: string
+  facebookLink: string
+  funFact: string
+  pictureName: string
+  pictureType: string
+  pictureDataUrl: string
   lc: string // Local Committee
-  role: string
-  diet: string
+  department: string
+  position: string
+  excitement: string
+  attendedNationalConference: string
+  differently: string
+  expectations: string
   allergies: string
-  roommate: string
+  comfort: string
+  comingFor: string
+  feeAgreement: boolean
   qrCodeDataUrl: string
   createdAt: string
 }
