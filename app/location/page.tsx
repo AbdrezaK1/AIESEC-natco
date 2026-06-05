@@ -53,8 +53,8 @@ const facilities = [
 
 const travelNotes = [
   { method: 'By Air', detail: 'Houari Boumediene Airport to the venue takes around 30 minutes by taxi.' },
-  { method: 'By Metro', detail: 'Line 1 to Place du 1er Mai, then a short walk or taxi to the hotel.' },
-  { method: 'By Car', detail: 'Free parking is available on-site via Boulevard Frantz Fanon.' },
+  { method: 'By Metro', detail: 'Use the closest available metro stop, then continue by taxi to the hotel.' },
+  { method: 'By Car', detail: 'Use the Google Maps link for the most accurate route and parking details.' },
   { method: 'By Bus', detail: 'Lines 25, 81, and 103 stop close to the venue.' },
 ]
 
@@ -70,7 +70,7 @@ export default function LocationPage() {
             Venue, routes, and the full schedule board.
           </h1>
           <p style={{ color: '#5f4930', fontSize: '16px', lineHeight: 1.8 }}>
-            July 18-20, 2025. Hotel El Aurassi, Algiers, Algeria.
+            June 25-27, 2026. Hôtel Meddouda El-Djamil, Algeria.
           </p>
         </div>
 
@@ -124,9 +124,9 @@ export default function LocationPage() {
                   Basecamp
                 </p>
                 <p className="board-title" style={{ fontSize: '24px', marginBottom: '4px' }}>
-                  Hotel El Aurassi
+                  Hôtel Meddouda El-Djamil
                 </p>
-                <p style={{ color: '#6a5035', fontSize: '13px' }}>2 Boulevard Frantz Fanon, Algiers</p>
+                <p style={{ color: '#6a5035', fontSize: '13px' }}>Open the map for the exact route</p>
               </div>
             </div>
 
@@ -141,10 +141,10 @@ export default function LocationPage() {
             >
               <div>
                 <h2 className="board-title" style={{ fontSize: '30px', marginBottom: '10px' }}>
-                  Hotel El Aurassi
+                  Hôtel Meddouda El-Djamil
                 </h2>
                 <p style={{ color: '#5f4930', fontSize: '15px', lineHeight: 1.8, marginBottom: '14px' }}>
-                  The conference board is centered at Hotel El Aurassi with enough space for plenaries, workshops, accommodation, meals, and delegation movement without losing the shared atmosphere.
+                  The conference board is centered at Hôtel Meddouda El-Djamil with enough space for plenaries, workshops, accommodation, meals, and delegation movement without losing the shared atmosphere.
                 </p>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {['Free WiFi', 'Prayer room', 'On-site dining', 'Shuttle service'].map((tag) => (
@@ -157,7 +157,7 @@ export default function LocationPage() {
 
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 <a
-                  href="https://maps.google.com/?q=Hotel+El+Aurassi+Algiers"
+                  href="https://maps.app.goo.gl/YxjNV24A6anUAdG97"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="wood-button"

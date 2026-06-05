@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react'
 const navLinks = [
   { href: '/', label: 'Camp' },
   { href: '/seat', label: 'Registration' },
+  { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/location', label: 'Map' },
   { href: '/location#schedule', label: 'Schedule' },
   { href: '/gossip', label: 'Campfire' },
@@ -19,6 +20,7 @@ export default function Navbar() {
 
   const activePath = useMemo(() => {
     if (pathname.startsWith('/location')) return '/location'
+    if (pathname.startsWith('/leaderboard')) return '/leaderboard'
     return pathname
   }, [pathname])
 
@@ -51,50 +53,11 @@ export default function Navbar() {
           }}
         >
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-            <div
-              className="site-nav-mark"
-              style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '18px',
-                background: 'linear-gradient(180deg, #ffd72f, #e7a81d)',
-                border: '4px solid #6a3416',
-                boxShadow: '0 6px 0 #8c521c',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#4a230f',
-                fontFamily: 'Cinzel, Georgia, serif',
-                fontSize: '24px',
-                fontWeight: 700,
-                flexShrink: 0,
-              }}
-            >
-              J
-            </div>
+            <span className="site-nav-logo-frame" aria-hidden="true">
+              <img src="/jumanco-logo.png" alt="" />
+            </span>
             <div style={{ minWidth: 0 }}>
-              <span
-                className="logo-wordmark mobile-brand-wordmark"
-                style={{
-                  display: 'block',
-                  fontSize: '28px',
-                  WebkitTextStroke: '3px #6a3416',
-                  textShadow: '0 5px 0 #8d4a1d, 0 12px 18px rgba(77, 37, 16, 0.18)',
-                }}
-              >
-                Jumanco
-              </span>
-              <span
-                style={{
-                  display: 'block',
-                  marginTop: '2px',
-                  color: '#7a5934',
-                  fontSize: '11px',
-                  letterSpacing: '0.16em',
-                  textTransform: 'uppercase',
-                  fontWeight: 700,
-                }}
-              >
+              <span className="site-nav-subtitle">
                 National Conference
               </span>
             </div>
@@ -207,7 +170,7 @@ export default function Navbar() {
         @media (max-width: 980px) {
           .site-nav { padding: 8px 8px 0 !important; }
           .site-nav-panel { padding: 10px 12px !important; border-width: 4px !important; border-radius: 22px !important; }
-          .site-nav-mark { width: 44px !important; height: 44px !important; border-radius: 15px !important; font-size: 20px !important; border-width: 3px !important; }
+          .site-nav-logo-frame { width: 70px !important; height: 48px !important; }
           .desktop-nav { display: none !important; }
           .hide-mobile { display: none !important; }
           .show-mobile { display: flex !important; }
@@ -219,12 +182,12 @@ export default function Navbar() {
             pointer-events: auto;
             transform: translateY(0);
           }
-          .mobile-brand-wordmark { font-size: 22px !important; -webkit-text-stroke: 2px #6a3416 !important; }
+          .site-nav-subtitle { font-size: 10px !important; letter-spacing: 0.1em !important; }
         }
         @media (max-width: 420px) {
           .site-nav-panel { padding: 9px 10px !important; }
-          .site-nav-mark { width: 40px !important; height: 40px !important; }
-          .mobile-brand-wordmark { font-size: 20px !important; }
+          .site-nav-logo-frame { width: 62px !important; height: 44px !important; }
+          .site-nav-subtitle { display: none !important; }
         }
         @media (min-width: 981px) {
           .show-mobile { display: none !important; }

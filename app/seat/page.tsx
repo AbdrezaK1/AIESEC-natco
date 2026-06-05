@@ -248,7 +248,7 @@ export default function SeatPage() {
   const boardStyle: React.CSSProperties = {
     background:
       'radial-gradient(circle at top, rgba(255,255,255,0.45), transparent 26%), linear-gradient(180deg, #f8edd6 0%, #ead8b1 100%)',
-    border: '6px solid #6b3d1c',
+    border: '6px solid var(--brand-bark)',
     boxShadow: 'inset 0 0 0 3px #9f6c37, 0 22px 40px rgba(61, 33, 14, 0.24)',
     borderRadius: '28px',
   }
@@ -414,14 +414,8 @@ export default function SeatPage() {
               ))}
             </div>
 
-            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '20px' }}>
-              <div style={logoTextStyle}>
-                Juma
-                <br />
-                nco
-              </div>
-              <div style={{ position: 'absolute', top: '-10px', left: '-26px', fontSize: '34px', transform: 'rotate(-18deg)' }}>Leaf</div>
-              <div style={{ position: 'absolute', top: '44px', right: '-18px', fontSize: '26px', transform: 'rotate(16deg)' }}>Map</div>
+            <div className="official-logo-shell hero-official-logo">
+              <img className="official-logo-image" src="/jumanco-logo.png" alt="Juman'CO official conference logo" />
             </div>
 
             <p style={{ color: '#7b5528', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '14px', fontSize: '12px' }}>
