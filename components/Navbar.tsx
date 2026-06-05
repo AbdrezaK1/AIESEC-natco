@@ -1,4 +1,5 @@
 'use client'
+import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useMemo, useState } from 'react'
@@ -133,7 +134,9 @@ export default function Navbar() {
             <button
               onClick={() => setMenuOpen((open) => !open)}
               aria-label="Toggle navigation menu"
-              className="show-mobile"
+              aria-controls="mobile-navigation"
+              aria-expanded={menuOpen}
+              className="show-mobile mobile-menu-button"
               style={{
                 width: '48px',
                 height: '48px',
@@ -146,61 +149,61 @@ export default function Navbar() {
                 justifyContent: 'center',
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                {menuOpen ? (
-                  <path d="M3 3L15 15M15 3L3 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                ) : (
-                  <>
-                    <rect x="2" y="4" width="14" height="2" rx="1" fill="currentColor" />
-                    <rect x="2" y="8" width="14" height="2" rx="1" fill="currentColor" />
-                    <rect x="2" y="12" width="14" height="2" rx="1" fill="currentColor" />
-                  </>
-                )}
-              </svg>
+              {menuOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
             </button>
           </div>
         </div>
 
-        {menuOpen ? (
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              display: 'grid',
-              gap: '10px',
-              marginTop: '14px',
-            }}
-            className="show-mobile mobile-menu"
-          >
-            {navLinks.map((link) => {
-              const active = link.href.startsWith('/location') ? activePath === '/location' : activePath === link.href
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  style={{
-                    textDecoration: 'none',
-                    padding: '12px 14px',
-                    borderRadius: '18px',
-                    border: active ? '3px solid #6a3416' : '2px solid rgba(107, 61, 28, 0.12)',
-                    background: active ? 'linear-gradient(180deg, #ffd72f, #e7a81d)' : 'rgba(255, 255, 255, 0.38)',
-                    color: active ? '#4a230f' : '#6f4a28',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {link.label}
-                </Link>
-              )
-            })}
-          </div>
-        ) : null}
+        <div
+          id="mobile-navigation"
+          aria-hidden={!menuOpen}
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            display: 'grid',
+            gap: '10px',
+          }}
+          className={`mobile-menu ${menuOpen ? 'mobile-menu-open' : ''}`}
+        >
+          {navLinks.map((link) => {
+            const active = link.href.startsWith('/location') ? activePath === '/location' : activePath === link.href
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                tabIndex={menuOpen ? 0 : -1}
+                style={{
+                  textDecoration: 'none',
+                  padding: '12px 14px',
+                  borderRadius: '18px',
+                  border: active ? '3px solid #6a3416' : '2px solid rgba(107, 61, 28, 0.12)',
+                  background: active ? 'linear-gradient(180deg, #ffd72f, #e7a81d)' : 'rgba(255, 255, 255, 0.38)',
+                  color: active ? '#4a230f' : '#6f4a28',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
+        </div>
       </div>
 
       <style>{`
+        .mobile-menu {
+          display: none !important;
+          max-height: 0;
+          margin-top: 0;
+          overflow: hidden;
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(-10px);
+          transition: max-height 0.32s ease, margin-top 0.32s ease, opacity 0.22s ease, transform 0.32s ease;
+        }
         @media (max-width: 980px) {
           .site-nav { padding: 8px 8px 0 !important; }
           .site-nav-panel { padding: 10px 12px !important; border-width: 4px !important; border-radius: 22px !important; }
@@ -208,7 +211,14 @@ export default function Navbar() {
           .desktop-nav { display: none !important; }
           .hide-mobile { display: none !important; }
           .show-mobile { display: flex !important; }
-          .show-mobile.mobile-menu { display: grid !important; }
+          .mobile-menu { display: grid !important; }
+          .mobile-menu.mobile-menu-open {
+            max-height: 460px;
+            margin-top: 14px;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+          }
           .mobile-brand-wordmark { font-size: 22px !important; -webkit-text-stroke: 2px #6a3416 !important; }
         }
         @media (max-width: 420px) {
