@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
   title: 'JUMANCO | National Conference',
-  description: 'A jungle-inspired national conference experience with registration, routes, campfire stories, and delegate profiles.',
+  description: 'A jungle-inspired national conference experience with registration, routes, campfire stories, and delegate messages.',
 }
 
 export default function RootLayout({

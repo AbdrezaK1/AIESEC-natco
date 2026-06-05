@@ -71,7 +71,7 @@ const sectionTitles = [
   'Real Talk',
 ]
 
-const featureNotes = ['6 checkpoints', 'Picture upload', 'Google Sheets storage']
+const featureNotes: string[] = []
 
 export default function SeatPage() {
   const [form, setForm] = useState<FormState>(initialForm)

@@ -11,7 +11,6 @@ A Next.js web app for the AIESEC national conference experience.
 | Venue and Schedule | `/location` | Venue details, facilities, travel notes, and schedule |
 | Gossip Wall | `/gossip` | Anonymous campfire stories with reactions |
 | Wishes Board | `/wishes` | Positive messages between delegates |
-| My Profile | `/profile` | Reservation lookup and QR check-in pass |
 | Admin Dashboard | `/admin` | Registration list, stats, and CSV export |
 
 ## Tech Stack
@@ -54,7 +53,17 @@ Restart `npm run dev` after changing `.env.local`.
 
 If the form fields change, paste the latest `google-sheets-apps-script.js` into Apps Script and deploy a new web app version. The script also saves uploaded smiling pictures to a Google Drive folder named `JumanCO registration pictures` and writes the Drive link into the sheet.
 
+## Countdown Timer
+
+The homepage countdown uses `NEXT_PUBLIC_COUNTDOWN_TARGET`. Add or update it in `.env.local`:
+
+```bash
+NEXT_PUBLIC_COUNTDOWN_TARGET=2026-06-15T09:00:00+01:00
+```
+
+Restart `npm run dev` after changing the date.
+
 ## Notes
 
-- The app also stores data in `lib/store.ts` for local admin/profile features, but Google Sheets is now the persistent registration backup.
+- The app also stores data in `lib/store.ts` for local admin features, but Google Sheets is now the persistent registration backup.
 - `.env.local`, `.next`, and `node_modules` are ignored and are not included in Git.

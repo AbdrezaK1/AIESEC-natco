@@ -10,7 +10,6 @@ const navLinks = [
   { href: '/location#schedule', label: 'Schedule' },
   { href: '/gossip', label: 'Campfire' },
   { href: '/wishes', label: 'Totems' },
-  { href: '/profile', label: 'Profile' },
 ]
 
 export default function Navbar() {
@@ -24,6 +23,7 @@ export default function Navbar() {
 
   return (
     <nav
+      className="site-nav"
       style={{
         position: 'fixed',
         inset: '0 0 auto 0',
@@ -32,7 +32,7 @@ export default function Navbar() {
       }}
     >
       <div
-        className="board-panel"
+        className="board-panel site-nav-panel"
         style={{
           maxWidth: '1240px',
           margin: '0 auto',
@@ -51,6 +51,7 @@ export default function Navbar() {
         >
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
             <div
+              className="site-nav-mark"
               style={{
                 width: '52px',
                 height: '52px',
@@ -72,7 +73,7 @@ export default function Navbar() {
             </div>
             <div style={{ minWidth: 0 }}>
               <span
-                className="logo-wordmark"
+                className="logo-wordmark mobile-brand-wordmark"
                 style={{
                   display: 'block',
                   fontSize: '28px',
@@ -169,7 +170,7 @@ export default function Navbar() {
               gap: '10px',
               marginTop: '14px',
             }}
-            className="show-mobile"
+            className="show-mobile mobile-menu"
           >
             {navLinks.map((link) => {
               const active = link.href.startsWith('/location') ? activePath === '/location' : activePath === link.href
@@ -201,9 +202,19 @@ export default function Navbar() {
 
       <style>{`
         @media (max-width: 980px) {
+          .site-nav { padding: 8px 8px 0 !important; }
+          .site-nav-panel { padding: 10px 12px !important; border-width: 4px !important; border-radius: 22px !important; }
+          .site-nav-mark { width: 44px !important; height: 44px !important; border-radius: 15px !important; font-size: 20px !important; border-width: 3px !important; }
           .desktop-nav { display: none !important; }
           .hide-mobile { display: none !important; }
           .show-mobile { display: flex !important; }
+          .show-mobile.mobile-menu { display: grid !important; }
+          .mobile-brand-wordmark { font-size: 22px !important; -webkit-text-stroke: 2px #6a3416 !important; }
+        }
+        @media (max-width: 420px) {
+          .site-nav-panel { padding: 9px 10px !important; }
+          .site-nav-mark { width: 40px !important; height: 40px !important; }
+          .mobile-brand-wordmark { font-size: 20px !important; }
         }
         @media (min-width: 981px) {
           .show-mobile { display: none !important; }

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
+import CountdownTimer from '@/components/CountdownTimer'
 import { getStore } from '@/lib/store'
 
 const features = [
@@ -23,14 +24,10 @@ const features = [
     label: 'Totem Wishes',
     desc: 'Leave kind messages, blessings, and energy for delegates across the camp.',
   },
-  {
-    href: '/profile',
-    label: 'Explorer Profile',
-    desc: 'Look up your reservation, your QR pass, and your personal conference details.',
-  },
 ]
 
-const highlights = ['3 days of conference energy', '9 active local committees on-site', 'QR pass ready for check-in']
+const highlights = ['3 days of conference energy', '9 active local committees on-site']
+const countdownTarget = process.env.NEXT_PUBLIC_COUNTDOWN_TARGET || '2026-06-15T09:00:00+01:00'
 
 export default function HomePage() {
   noStore()
@@ -46,6 +43,8 @@ export default function HomePage() {
   return (
     <div className="paper-page">
       <div className="paper-container">
+        <CountdownTimer targetDate={countdownTarget} />
+
         <section
           style={{
             display: 'grid',

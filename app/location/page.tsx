@@ -246,6 +246,7 @@ export default function LocationPage() {
                     {day.events.map((event, index) => (
                       <div
                         key={`${day.day}-${event.time}`}
+                        className="schedule-row"
                         style={{
                           display: 'grid',
                           gridTemplateColumns: '56px 1fr auto',
