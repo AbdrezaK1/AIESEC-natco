@@ -1,15 +1,15 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { Medal, Trophy, UsersRound } from 'lucide-react'
-import { getLcLeaderboard, localCommittees } from '@/lib/lcLeaderboard'
-import { getStore } from '@/lib/store'
+import { localCommittees } from '@/lib/lcLeaderboard'
+import { getRegistrationStats } from '@/lib/registrationStats'
 
-export default function LeaderboardPage() {
+export default async function LeaderboardPage() {
   noStore()
 
-  const reservations = getStore().reservations
-  const leaderboard = getLcLeaderboard(reservations)
-  const totalDelegates = reservations.length
+  const registrationStats = await getRegistrationStats()
+  const leaderboard = registrationStats.lcLeaderboard
+  const totalDelegates = registrationStats.totalDelegates
   const leader = leaderboard[0]
   const activeLcs = leaderboard.filter((item) => item.count > 0).length
 
@@ -26,7 +26,7 @@ export default function LeaderboardPage() {
             </p>
             <h1 className="board-title">Registered Delegates By LC</h1>
             <p>
-              Follow which local committees are filling the Juman'CO game board. The ranking updates from registrations saved in the site store.
+              Follow which local committees are filling the Juman'CO game board. The ranking updates from registrations saved in Google Sheets.
             </p>
             <div className="leaderboard-actions">
               <Link href="/seat" className="wood-button">

@@ -2,8 +2,7 @@ import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { Trophy, UsersRound } from 'lucide-react'
 import CountdownTimer from '@/components/CountdownTimer'
-import { getLcLeaderboard } from '@/lib/lcLeaderboard'
-import { getStore } from '@/lib/store'
+import { getRegistrationStats } from '@/lib/registrationStats'
 
 const features = [
   {
@@ -36,14 +35,14 @@ const features = [
 const highlights = ['3 days of conference energy', '7 active local committees on-site']
 const countdownTarget = process.env.NEXT_PUBLIC_COUNTDOWN_TARGET || '2026-06-15T09:00:00+01:00'
 
-export default function HomePage() {
+export default async function HomePage() {
   noStore()
 
-  const reservations = getStore().reservations
-  const delegateCount = reservations.length
-  const lcLeaderboardPreview = getLcLeaderboard(reservations).slice(0, 3)
+  const registrationStats = await getRegistrationStats()
+  const delegateCount = registrationStats.totalDelegates
+  const lcLeaderboardPreview = registrationStats.lcLeaderboard.slice(0, 3)
 
-  const stats = [
+  const conferenceStats = [
     { value: delegateCount.toString(), label: 'Delegates' },
     { value: '7', label: 'Local Committees' },
     { value: '3', label: 'Days' },
@@ -108,7 +107,7 @@ export default function HomePage() {
               </h2>
 
             <div className="board-grid" style={{ marginBottom: '18px' }}>
-              {stats.map((stat) => (
+              {conferenceStats.map((stat) => (
                 <div key={stat.label} className="metric-card">
                   <p style={{ fontSize: '30px', color: '#4b2912', fontWeight: 700, marginBottom: '6px' }}>{stat.value}</p>
                   <p className="section-kicker" style={{ color: '#7c5a33' }}>

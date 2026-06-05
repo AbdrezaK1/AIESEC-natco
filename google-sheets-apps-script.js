@@ -58,7 +58,15 @@ function doPost(e) {
   }
 }
 
-function doGet() {
+function doGet(e) {
+  if (e && e.parameter && e.parameter.action === 'stats') {
+    try {
+      return jsonResponse(getRegistrationStats())
+    } catch (error) {
+      return jsonResponse({ success: false, error: String(error && error.message ? error.message : error) })
+    }
+  }
+
   const status = {
     success: true,
     message: 'JumanCO Google Sheets webhook is connected.',
@@ -93,6 +101,57 @@ function doGet() {
   }
 
   return jsonResponse(status)
+}
+
+function getRegistrationStats() {
+  const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemen', 'LC Oran']
+  const counts = {}
+  const sheet = getReservationsSheet()
+  const values = sheet.getDataRange().getValues()
+
+  localCommittees.forEach(function (lc) {
+    counts[lc] = 0
+  })
+
+  const rows = values.slice(1).filter(function (row) {
+    return row[1] || row[3] || row[12]
+  })
+
+  rows.forEach(function (row) {
+    const lc = String(row[12] || '').trim()
+
+    if (lc) {
+      counts[lc] = (counts[lc] || 0) + 1
+    }
+  })
+
+  const ranked = localCommittees
+    .map(function (lc, order) {
+      return { lc: lc, order: order, count: counts[lc] || 0 }
+    })
+    .sort(function (a, b) {
+      return b.count - a.count || a.order - b.order
+    })
+
+  const highestCount = Math.max.apply(null, [1].concat(ranked.map(function (item) {
+    return item.count
+  })))
+
+  return {
+    success: true,
+    source: 'google-sheets',
+    totalDelegates: rows.length,
+    lcLeaderboard: ranked.map(function (item, index) {
+      return {
+        lc: item.lc,
+        order: item.order,
+        count: item.count,
+        rank: index + 1,
+        progress: item.count === 0 ? 0 : Math.max(10, Math.round((item.count / highestCount) * 100)),
+      }
+    }),
+    updatedAt: new Date().toISOString(),
+  }
 }
 
 function jsonResponse(payload) {
