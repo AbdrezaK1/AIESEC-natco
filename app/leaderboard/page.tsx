@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { Medal, Trophy, UsersRound } from 'lucide-react'
+import LiveDelegateCount from '@/components/LiveDelegateCount'
 import { localCommittees } from '@/lib/lcLeaderboard'
 import { getRegistrationStats } from '@/lib/registrationStats'
 
@@ -41,7 +42,7 @@ export default async function LeaderboardPage() {
 
         <section className="leaderboard-stat-grid animate-in" aria-label="Leaderboard summary">
           {[
-            { label: 'Delegates', value: totalDelegates.toString(), icon: UsersRound },
+            { label: 'Delegates', value: <LiveDelegateCount initialCount={totalDelegates} />, icon: UsersRound },
             { label: 'Active LCs', value: `${activeLcs}/${localCommittees.length}`, icon: Medal },
             { label: 'Current Leader', value: leader?.count ? leader.lc.replace('LC ', '') : 'Waiting', icon: Trophy },
           ].map((stat) => {

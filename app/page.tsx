@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { Trophy, UsersRound } from 'lucide-react'
 import CountdownTimer from '@/components/CountdownTimer'
+import LiveDelegateCount from '@/components/LiveDelegateCount'
 import { getRegistrationStats } from '@/lib/registrationStats'
 
 const features = [
@@ -43,7 +44,7 @@ export default async function HomePage() {
   const lcLeaderboardPreview = registrationStats.lcLeaderboard.slice(0, 3)
 
   const conferenceStats = [
-    { value: delegateCount.toString(), label: 'Delegates' },
+    { value: <LiveDelegateCount initialCount={delegateCount} />, label: 'Delegates' },
     { value: '7', label: 'Local Committees' },
     { value: '3', label: 'Days' },
     { value: '20+', label: 'Sessions' },
@@ -178,8 +179,8 @@ export default async function HomePage() {
             <p className="section-kicker">Number of Delegates</p>
             <p>Registered players currently inside the game.</p>
           </div>
-          <div className="delegate-counter-number" aria-live="polite">
-            {delegateCount}
+          <div className="delegate-counter-number">
+            <LiveDelegateCount initialCount={delegateCount} />
           </div>
         </section>
 
