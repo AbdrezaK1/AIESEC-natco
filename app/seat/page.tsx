@@ -269,6 +269,8 @@ export default function SeatPage() {
   const errorText = (key: keyof FormState) =>
     errors[key] ? <p style={{ color: '#b23e23', fontSize: '12px', marginTop: '6px', fontWeight: 700 }}>{errors[key]}</p> : null
 
+  const qrDownloadName = reservationId ? `${reservationId}-qr-pass.png` : 'jumanco-qr-pass.png'
+
   const renderTextInput = (
     key: keyof FormState,
     label: string,
@@ -329,8 +331,29 @@ export default function SeatPage() {
             </h1>
             <p style={{ color: '#5d452f', fontSize: '18px', lineHeight: '1.75', maxWidth: '620px', margin: '0 auto 24px' }}>
               You made it through the first checkpoint, congrats! You've entered the game... Thank you for registering for Juman'CO.
-              You'll receive a confirmation email once we've reviewed your application, along with the next steps.
+              Download your QR pass now and keep it ready for check-in.
             </p>
+            <div
+              role="status"
+              style={{
+                maxWidth: '640px',
+                margin: '0 auto 22px',
+                background: 'linear-gradient(180deg, rgba(255, 215, 47, 0.34), rgba(231, 168, 29, 0.24))',
+                border: '4px solid #6a3416',
+                borderRadius: '20px',
+                boxShadow: '0 10px 0 rgba(140, 82, 28, 0.42), inset 0 0 0 2px rgba(255, 249, 236, 0.7)',
+                color: '#4c250f',
+                padding: '18px 20px',
+                textAlign: 'center',
+              }}
+            >
+              <p style={{ fontFamily: 'Cinzel, Georgia, serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase' }}>
+                Important Check-In Step
+              </p>
+              <p style={{ fontSize: '15px', fontWeight: 800, lineHeight: 1.6 }}>
+                Download your QR pass before leaving this page. You will need it to enter the conference.
+              </p>
+            </div>
             {!sheetsSynced ? (
               <div
                 role="alert"
@@ -387,10 +410,38 @@ export default function SeatPage() {
                     Check-In QR
                   </p>
                   {qrCodeDataUrl ? (
-                    <img src={qrCodeDataUrl} alt="Reservation QR code" style={{ width: '220px', height: '220px', display: 'block', margin: '0 auto 14px', background: '#fffdfa', padding: '14px', borderRadius: '18px', border: '4px solid #7b5528', maxWidth: '100%' }} />
+                    <>
+                      <img src={qrCodeDataUrl} alt="Reservation QR code" style={{ width: '220px', height: '220px', display: 'block', margin: '0 auto 14px', background: '#fffdfa', padding: '14px', borderRadius: '18px', border: '4px solid #7b5528', maxWidth: '100%' }} />
+                      <a
+                        href={qrCodeDataUrl}
+                        download={qrDownloadName}
+                        aria-label={`Download QR pass for reservation ${reservationId}`}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '100%',
+                          maxWidth: '240px',
+                          margin: '0 auto 12px',
+                          padding: '12px 16px',
+                          borderRadius: '999px',
+                          background: 'linear-gradient(180deg, #ffd72f, #e7a81d)',
+                          border: '3px solid #6a3416',
+                          boxShadow: '0 6px 0 #8c521c',
+                          color: '#4c250f',
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          letterSpacing: '0.06em',
+                          textDecoration: 'none',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Download QR Pass
+                      </a>
+                    </>
                   ) : null}
                   <p style={{ color: '#5d452f', fontSize: '13px', lineHeight: '1.7' }}>
-                    Keep this pass for the next checkpoint.
+                    Keep this pass safe. It is required for check-in.
                   </p>
                 </div>
               </div>
