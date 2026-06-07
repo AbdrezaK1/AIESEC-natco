@@ -245,11 +245,13 @@ export default function SeatPage() {
     letterSpacing: '0.06em',
   }
 
+  const seatPageBackground = 'var(--site-jungle-background)'
+
   const boardStyle: React.CSSProperties = {
     background:
-      'radial-gradient(circle at top, rgba(255,255,255,0.45), transparent 26%), linear-gradient(180deg, #f8edd6 0%, #ead8b1 100%)',
-    border: '6px solid var(--brand-bark)',
-    boxShadow: 'inset 0 0 0 3px #9f6c37, 0 22px 40px rgba(61, 33, 14, 0.24)',
+      'radial-gradient(circle at top, rgba(255,255,255,0.42), transparent 28%), radial-gradient(circle at 96% 0%, rgba(143, 206, 97, 0.14), transparent 24%), linear-gradient(180deg, var(--quest-parchment, #fff4d1) 0%, #ead39a 100%)',
+    border: '6px solid var(--quest-board-bark, #4c230f)',
+    boxShadow: 'inset 0 0 0 3px rgba(255, 232, 128, 0.36), 0 24px 44px rgba(44, 24, 10, 0.24)',
     borderRadius: '28px',
   }
 
@@ -321,7 +323,7 @@ export default function SeatPage() {
 
   if (success) {
     return (
-      <div style={{ minHeight: '100vh', paddingTop: '88px', paddingBottom: '60px', background: 'linear-gradient(180deg, #efe4c8 0%, #dcc59a 100%)' }}>
+      <div className="seat-page-shell" style={{ minHeight: '100vh', paddingTop: '88px', paddingBottom: '60px', background: seatPageBackground }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px' }}>
           <div className="animate-in" style={{ ...boardStyle, padding: '42px 28px 34px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', inset: '18px', border: '2px dashed rgba(107,61,28,0.18)', borderRadius: '20px', pointerEvents: 'none' }} />
@@ -453,7 +455,7 @@ export default function SeatPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', paddingTop: '88px', paddingBottom: '64px', background: 'radial-gradient(circle at top center, rgba(255,240,194,0.38), transparent 20%), linear-gradient(180deg, #f2e8cf 0%, #dec898 100%)' }}>
+    <div className="seat-page-shell" style={{ minHeight: '100vh', paddingTop: '88px', paddingBottom: '64px', background: seatPageBackground }}>
       <div style={{ maxWidth: '1180px', margin: '0 auto', padding: '0 24px' }}>
         <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 0.86fr) minmax(420px, 1.14fr)', gap: '26px', alignItems: 'start' }}>
           <div className="animate-in" style={{ paddingTop: '20px' }}>
@@ -479,7 +481,7 @@ export default function SeatPage() {
               Move through each checkpoint, tell us who you are, choose your journey, and submit your Juman'CO application.
             </p>
 
-            <div style={{ ...boardStyle, padding: '20px 22px', maxWidth: '520px', background: 'linear-gradient(180deg, #f6e9ca 0%, #e7d2a2 100%)' }}>
+            <div style={{ ...boardStyle, padding: '20px 22px', maxWidth: '520px' }}>
               <p style={{ color: '#7b5528', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '12px', fontWeight: 700 }}>
                 Adventure Flow
               </p>

@@ -55,9 +55,9 @@ const store = {
     { id: '3', content: 'LC from the South brought homemade harissa for the whole delegation. Absolute legends.', tag: 'Food', likes: 42, createdAt: new Date(Date.now() - 3600000 * 8).toISOString() },
   ] as GossipPost[],
   wishes: [
-    { id: '1', authorName: 'Rania B.', recipientName: 'Hela T.', message: 'You are going to absolutely crush your presentation. So proud of you!', emoji: '🌟', createdAt: new Date(Date.now() - 3600000 * 1).toISOString() },
-    { id: '2', authorName: 'Karim M.', recipientName: 'All Delegates', message: "May this NatCo bring us closer together and remind us why we chose AIESEC. Let's make history.", emoji: '💙', createdAt: new Date(Date.now() - 3600000 * 4).toISOString() },
-    { id: '3', authorName: 'Sarah A.', recipientName: 'Constantine LC', message: "The road trip was worth it! See you on the dance floor, fam.", emoji: '🔥', createdAt: new Date(Date.now() - 3600000 * 6).toISOString() },
+    { id: '1', authorName: 'Rania B.', recipientName: 'Hela T.', message: 'You are going to absolutely crush your presentation. So proud of you!', emoji: 'Star', createdAt: new Date(Date.now() - 3600000 * 1).toISOString() },
+    { id: '2', authorName: 'Karim M.', recipientName: 'All Delegates', message: "May this NatCo bring us closer together and remind us why we chose AIESEC. Let's make history.", emoji: 'Blue Heart', createdAt: new Date(Date.now() - 3600000 * 4).toISOString() },
+    { id: '3', authorName: 'Sarah A.', recipientName: 'Constantine LC', message: "The road trip was worth it! See you on the dance floor, fam.", emoji: 'Fire', createdAt: new Date(Date.now() - 3600000 * 6).toISOString() },
   ] as Wish[],
 }
 

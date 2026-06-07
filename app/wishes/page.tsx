@@ -3,19 +3,6 @@ import { useEffect, useState } from 'react'
 
 const emojis = ['Blue Heart', 'Star', 'Fire', 'Sparkle', 'Target', 'Lion', 'Rocket', 'Strength', 'Globe', 'Party']
 
-const emojiMap: Record<string, string> = {
-  'Blue Heart': 'BH',
-  Star: 'ST',
-  Fire: 'FR',
-  Sparkle: 'SP',
-  Target: 'TG',
-  Lion: 'LN',
-  Rocket: 'RK',
-  Strength: 'PW',
-  Globe: 'GB',
-  Party: 'PT',
-}
-
 interface Wish {
   id: string
   authorName: string
@@ -27,7 +14,7 @@ interface Wish {
 
 export default function WishesPage() {
   const [wishes, setWishes] = useState<Wish[]>([])
-  const [form, setForm] = useState({ authorName: '', recipientName: '', message: '', emoji: 'Blue Heart' })
+  const [form, setForm] = useState({ recipientName: '', message: '', emoji: 'Blue Heart' })
   const [submitting, setSubmitting] = useState(false)
   const [loading, setLoading] = useState(true)
   const [justPosted, setJustPosted] = useState('')
@@ -47,10 +34,10 @@ export default function WishesPage() {
   }, [])
 
   const handleSubmit = async () => {
-    if (!form.authorName.trim() || !form.recipientName.trim() || !form.message.trim()) return
+    if (!form.recipientName.trim() || !form.message.trim()) return
     setSubmitting(true)
     try {
-      const payload = { ...form, emoji: form.emoji }
+      const payload = { ...form, authorName: 'Anonymous', emoji: form.emoji }
       const res = await fetch('/api/wishes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,7 +46,7 @@ export default function WishesPage() {
       const newWish = await res.json()
       setWishes((prev) => [newWish, ...prev])
       setJustPosted(newWish.id)
-      setForm({ authorName: '', recipientName: '', message: '', emoji: 'Blue Heart' })
+      setForm({ recipientName: '', message: '', emoji: 'Blue Heart' })
       setTimeout(() => setJustPosted(''), 3000)
     } finally {
       setSubmitting(false)
@@ -75,7 +62,7 @@ export default function WishesPage() {
     return `${Math.floor(hrs / 24)}d ago`
   }
 
-  const isValid = form.authorName.trim() && form.recipientName.trim() && form.message.trim().length >= 10
+  const isValid = form.recipientName.trim() && form.message.trim().length >= 10
 
   return (
     <div className="paper-page">
@@ -98,23 +85,15 @@ export default function WishesPage() {
               Add A Wish
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16px', marginBottom: '16px' }} className="hero-grid">
-              <div>
-                <label className="section-kicker" style={{ display: 'block', marginBottom: '8px' }}>
-                  Your Name
-                </label>
-                <input value={form.authorName} onChange={(event) => setForm((prev) => ({ ...prev, authorName: event.target.value }))} placeholder="Your name" />
-              </div>
-              <div>
-                <label className="section-kicker" style={{ display: 'block', marginBottom: '8px' }}>
-                  Recipient
-                </label>
-                <input
-                  value={form.recipientName}
-                  onChange={(event) => setForm((prev) => ({ ...prev, recipientName: event.target.value }))}
-                  placeholder="Delegate name or all delegates"
-                />
-              </div>
+            <div style={{ marginBottom: '16px' }}>
+              <label className="section-kicker" style={{ display: 'block', marginBottom: '8px' }}>
+                Recipient
+              </label>
+              <input
+                value={form.recipientName}
+                onChange={(event) => setForm((prev) => ({ ...prev, recipientName: event.target.value }))}
+                placeholder="Delegate name, LC, or all delegates"
+              />
             </div>
 
             <div style={{ marginBottom: '16px' }}>
@@ -145,9 +124,10 @@ export default function WishesPage() {
                         minWidth: '54px',
                         background: form.emoji === item ? 'rgba(255, 212, 45, 0.45)' : 'rgba(255,255,255,0.4)',
                         border: form.emoji === item ? '3px solid #6a3416' : '2px solid rgba(107, 61, 28, 0.12)',
+                        whiteSpace: 'normal',
                       }}
                     >
-                      {emojiMap[item]}
+                      {item}
                     </button>
                   ))}
                 </div>
@@ -190,19 +170,22 @@ export default function WishesPage() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginBottom: '14px', alignItems: 'center' }}>
                     <div
                       style={{
-                        width: '52px',
-                        height: '52px',
+                        minHeight: '52px',
+                        minWidth: '92px',
                         borderRadius: '16px',
                         background: 'rgba(255,255,255,0.38)',
                         border: '3px solid rgba(107, 61, 28, 0.14)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        padding: '8px 12px',
                         color: '#6a3416',
+                        fontSize: '12px',
                         fontWeight: 700,
+                        textAlign: 'center',
                       }}
                     >
-                      {emojiMap[wish.emoji] || 'TW'}
+                      {emojis.includes(wish.emoji) ? wish.emoji : 'Totem Mark'}
                     </div>
                     <span style={{ color: '#8a6f51', fontFamily: 'DM Mono, monospace', fontSize: '12px' }}>{timeAgo(wish.createdAt)}</span>
                   </div>
@@ -213,9 +196,7 @@ export default function WishesPage() {
                   <p style={{ color: '#4d2d16', fontSize: '14px', lineHeight: 1.8, marginBottom: '16px' }}>{wish.message}</p>
 
                   <div style={{ borderTop: '1px solid rgba(107, 61, 28, 0.12)', paddingTop: '12px' }}>
-                    <p style={{ color: '#6a5035', fontSize: '13px' }}>
-                      From <strong>{wish.authorName}</strong>
-                    </p>
+                    <p style={{ color: '#6a5035', fontSize: '13px' }}>Shared with good conference energy.</p>
                   </div>
                 </div>
               </div>

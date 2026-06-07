@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { Trophy, UsersRound } from 'lucide-react'
 import CountdownTimer from '@/components/CountdownTimer'
+import JungleQuestBoard from '@/components/JungleQuestBoard'
 import LiveDelegateCount from '@/components/LiveDelegateCount'
 import { getRegistrationStats } from '@/lib/registrationStats'
 
@@ -14,7 +15,7 @@ const features = [
   {
     href: '/location',
     label: 'Basecamp Map',
-    desc: 'Explore the venue, the transport notes, and the full conference schedule.',
+    desc: 'Explore the venue map, basecamp details, and the schedule update.',
   },
   {
     href: '/gossip',
@@ -51,12 +52,12 @@ export default async function HomePage() {
   ]
 
   return (
-    <div className="paper-page">
+    <div className="paper-page jungle-page">
       <div className="paper-container">
         <CountdownTimer targetDate={countdownTarget} />
 
         <section
-          className="hero-grid snapshot-first-layout animate-in"
+          className="hero-grid snapshot-first-layout jungle-hero animate-in"
           style={{
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 0.86fr) minmax(340px, 1.14fr)',
@@ -85,7 +86,7 @@ export default async function HomePage() {
               A bright jungle-board experience for the whole conference.
             </h1>
             <p style={{ color: '#5f4930', fontSize: '17px', lineHeight: 1.8, maxWidth: '560px', marginBottom: '24px' }}>
-              Juman'CO now feels like one playful game board from top to bottom. Register delegates, check the map, follow the schedule, share campfire stories, and keep every part of the conference inside the same world.
+              Juman'CO now feels like one playful game board from top to bottom. Register delegates, check the map, follow schedule updates, share campfire stories, and keep every part of the conference inside the same world.
             </p>
 
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -93,7 +94,7 @@ export default async function HomePage() {
                 Enter The Camp
               </Link>
               <Link href="/location#schedule" className="wood-button alt">
-                View Schedule
+                Schedule Update
               </Link>
             </div>
           </div>
@@ -128,7 +129,7 @@ export default async function HomePage() {
             >
               {[
                 { step: '01', title: 'Register Delegates', desc: 'Collect the basic info and generate each QR pass.' },
-                { step: '02', title: 'Follow The Route', desc: 'Check rooms, travel info, and the full schedule.' },
+                { step: '02', title: 'Follow The Route', desc: 'Check rooms, travel info, and the schedule update.' },
                 { step: '03', title: 'Build The Energy', desc: 'Share wishes, stories, and moments from the camp.' },
               ].map((item, index) => (
                 <div
@@ -183,6 +184,8 @@ export default async function HomePage() {
             <LiveDelegateCount initialCount={delegateCount} />
           </div>
         </section>
+
+        <JungleQuestBoard />
 
         <section className="board-panel lc-leaderboard-panel lc-leaderboard-shortcut animate-in" aria-label="LC registration leaderboard shortcut">
           <div className="lc-leaderboard-content">
@@ -242,7 +245,7 @@ export default async function HomePage() {
 
               <div className="board-grid">
                 {features.map((feature, index) => (
-                  <Link key={feature.href} href={feature.href} className="board-link animate-in card-hover">
+                  <Link key={feature.href} href={feature.href} className="board-link game-route-link animate-in card-hover">
                     <div
                       className="metric-card"
                       style={{

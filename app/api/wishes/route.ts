@@ -12,10 +12,10 @@ export async function POST(req: NextRequest) {
 
   const wish = {
     id: Date.now().toString(),
-    authorName: body.authorName?.slice(0, 60),
+    authorName: body.authorName?.slice(0, 60) || 'Anonymous',
     recipientName: body.recipientName?.slice(0, 60),
     message: body.message?.slice(0, 400),
-    emoji: body.emoji || '💙',
+    emoji: body.emoji || 'Blue Heart',
     createdAt: new Date().toISOString(),
   }
 

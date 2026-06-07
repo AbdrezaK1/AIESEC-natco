@@ -23,6 +23,14 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <div className="conference-logo-watermark" aria-hidden="true" />
+        <div className="jungle-atmosphere site-wide-atmosphere" aria-hidden="true">
+          <span className="jungle-leaf leaf-one" />
+          <span className="jungle-leaf leaf-two" />
+          <span className="jungle-leaf leaf-three" />
+          <span className="jungle-vine vine-one" />
+          <span className="jungle-vine vine-two" />
+        </div>
         <Navbar />
         <main>{children}</main>
       </body>
