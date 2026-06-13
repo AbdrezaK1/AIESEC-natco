@@ -667,7 +667,7 @@ export default function SeatPage() {
                         The game is starting... Ra7 t9le3 l'avion, be quick and hop in!
                       </p>
                       <p style={{ color: '#53361e', lineHeight: 1.8, marginTop: '10px' }}>
-                        Choose your journey: 3 days / 2 nights - meals + accommodation included - .... DA. 1 night only - .... DA.
+                        Choose your journey: 3 days / 2 nights - meals + accommodation included -7000 DA. 1 night only - .... DA.
                       </p>
                     </div>
                     {renderSelect('comingFor', 'You are coming for', 'Choose your journey', ['1 night', '2 nights'])}
@@ -788,7 +788,7 @@ export default function SeatPage() {
                         onChange={(event) => updateField('feeAgreement', event.target.checked)}
                         style={{ width: '20px', height: '20px', marginTop: '2px', flexShrink: 0 }}
                       />
-                      By submitting this form, I agree that I am going to pay .... DA as fees for this conference attendance, even if I will not be present.
+                      By submitting this form, I agree that I am going to pay 7000 DA as fees for this conference attendance, even if I will not be present.
                     </label>
                     {errorText('feeAgreement')}
                   </>
