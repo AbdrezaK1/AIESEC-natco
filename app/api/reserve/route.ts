@@ -3,10 +3,36 @@ import QRCode from 'qrcode'
 import { getStore } from '@/lib/store'
 import { appendReservationToGoogleSheet } from '@/lib/googleSheets'
 
+const goodiePackPrices: Record<string, number> = {
+  'Starter pack': 1900,
+  'Explorer pack': 3100,
+  'Adventurer pack': 1950,
+  'Premium JumanCO pack': 3400,
+}
+
+const goodiePrices = {
+  tshirt: 1800,
+  pin: 120,
+  bracelet: 150,
+  cap: 1600,
+}
+
+function getPositiveQuantity(value: unknown) {
+  const quantity = Number(value)
+  return Number.isInteger(quantity) && quantity > 0 ? quantity : 0
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const store = getStore()
+    const goodiePack = typeof body.goodiePack === 'string' && body.goodiePack in goodiePackPrices ? body.goodiePack : 'No pack'
+    const goodiesTotal =
+      (goodiePackPrices[goodiePack] || 0) +
+      (body.goodieTshirt === 'Yes' ? goodiePrices.tshirt : 0) +
+      (body.goodieBadge === 'Yes' ? getPositiveQuantity(body.goodieBadgeQuantity) * goodiePrices.pin : 0) +
+      (body.goodieWristband === 'Yes' ? getPositiveQuantity(body.goodieWristbandQuantity) * goodiePrices.bracelet : 0) +
+      (body.goodieCap === 'Yes' ? getPositiveQuantity(body.goodieCapQuantity) * goodiePrices.cap : 0)
 
     const id = `JUM-${Date.now().toString(36).toUpperCase()}`
     const qrPayload = JSON.stringify({
@@ -48,7 +74,9 @@ export async function POST(req: NextRequest) {
       comfort: body.comfort || '',
       comingFor: body.comingFor,
       goodieTshirt: body.goodieTshirt || 'No',
-      goodieTshirtSize: body.goodieTshirt === 'Yes' ? body.goodieTshirtSize || '' : '',
+      goodieTshirtSize: body.goodieTshirt === 'Yes' || goodiePack !== 'No pack' ? body.goodieTshirtSize || '' : '',
+      goodiePack,
+      goodiesTotal: String(goodiesTotal),
       goodieBadge: body.goodieBadge || 'No',
       goodieBadgeQuantity: body.goodieBadge === 'Yes' ? body.goodieBadgeQuantity || '' : '',
       goodieWristband: body.goodieWristband || 'No',
@@ -91,6 +119,8 @@ export async function POST(req: NextRequest) {
         comingFor: reservation.comingFor,
         goodieTshirt: reservation.goodieTshirt,
         goodieTshirtSize: reservation.goodieTshirtSize,
+        goodiePack: reservation.goodiePack,
+        goodiesTotal: reservation.goodiesTotal,
         goodieBadge: reservation.goodieBadge,
         goodieBadgeQuantity: reservation.goodieBadgeQuantity,
         goodieWristband: reservation.goodieWristband,

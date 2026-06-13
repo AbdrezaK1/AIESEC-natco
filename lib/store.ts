@@ -26,6 +26,8 @@ export interface Reservation {
   comingFor: string
   goodieTshirt: string
   goodieTshirtSize: string
+  goodiePack: string
+  goodiesTotal: string
   goodieBadge: string
   goodieBadgeQuantity: string
   goodieWristband: string

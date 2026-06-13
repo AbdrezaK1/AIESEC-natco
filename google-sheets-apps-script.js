@@ -30,12 +30,14 @@ const RESERVATION_HEADERS = [
   'QR Pass Drive Link',      // 25
   'Goodies T-Shirt',         // 26
   'Goodies T-Shirt Size',    // 27
-  'Goodies Badge',           // 28  ← was missing before
-  'Goodies Badge Quantity',  // 29
-  'Goodies Wristband',       // 30  ← was missing before
-  'Goodies Wristband Quantity', // 31
-  'Goodies Cap',             // 32  ← was missing before
-  'Goodies Cap Quantity',    // 33
+  'Goodies Pack',            // 28
+  'Goodies Total',           // 29
+  'Goodies Pin',             // 30
+  'Goodies Pin Quantity',    // 31
+  'Goodies Bracelet',        // 32
+  'Goodies Bracelet Quantity', // 33
+  'Goodies Cap',             // 34
+  'Goodies Cap Quantity',    // 35
 ]
 
 function authorizeSetup() {
@@ -67,7 +69,7 @@ function doPost(e) {
       Logger.log('QR pass upload error: ' + qrPassResult.error)
     }
 
-    // appendRow order must match RESERVATION_HEADERS exactly (33 columns)
+    // appendRow order must match RESERVATION_HEADERS exactly (35 columns)
     sheet.appendRow([
       new Date(),                                                           // 1  Received At
       data.id || '',                                                        // 2  Reservation ID
@@ -96,12 +98,14 @@ function doPost(e) {
       qrPassResult.url || qrPassResult.error || '',                        // 25 QR Pass Drive Link
       data.goodieTshirt === 'Yes' ? 'Yes' : 'No',                         // 26 Goodies T-Shirt
       data.goodieTshirtSize || '',                                          // 27 Goodies T-Shirt Size
-      data.goodieBadge === 'Yes' ? 'Yes' : 'No',                          // 28 Goodies Badge
-      data.goodieBadge === 'Yes' ? data.goodieBadgeQuantity || '' : '',    // 29 Goodies Badge Quantity
-      data.goodieWristband === 'Yes' ? 'Yes' : 'No',                      // 30 Goodies Wristband
-      data.goodieWristband === 'Yes' ? data.goodieWristbandQuantity || '' : '', // 31 Goodies Wristband Quantity
-      data.goodieCap === 'Yes' ? 'Yes' : 'No',                            // 32 Goodies Cap
-      data.goodieCap === 'Yes' ? data.goodieCapQuantity || '' : '',        // 33 Goodies Cap Quantity
+      data.goodiePack || 'No pack',                                        // 28 Goodies Pack
+      data.goodiesTotal || '0',                                            // 29 Goodies Total
+      data.goodieBadge === 'Yes' ? 'Yes' : 'No',                           // 30 Goodies Pin
+      data.goodieBadge === 'Yes' ? data.goodieBadgeQuantity || '' : '',     // 31 Goodies Pin Quantity
+      data.goodieWristband === 'Yes' ? 'Yes' : 'No',                       // 32 Goodies Bracelet
+      data.goodieWristband === 'Yes' ? data.goodieWristbandQuantity || '' : '', // 33 Goodies Bracelet Quantity
+      data.goodieCap === 'Yes' ? 'Yes' : 'No',                             // 34 Goodies Cap
+      data.goodieCap === 'Yes' ? data.goodieCapQuantity || '' : '',         // 35 Goodies Cap Quantity
     ])
 
     return jsonResponse({
