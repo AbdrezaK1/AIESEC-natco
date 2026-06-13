@@ -24,6 +24,14 @@ export interface Reservation {
   allergies: string
   comfort: string
   comingFor: string
+  goodieTshirt: string
+  goodieTshirtSize: string
+  goodieBadge: string
+  goodieBadgeQuantity: string
+  goodieWristband: string
+  goodieWristbandQuantity: string
+  goodieCap: string
+  goodieCapQuantity: string
   feeAgreement: boolean
   qrCodeDataUrl: string
   createdAt: string

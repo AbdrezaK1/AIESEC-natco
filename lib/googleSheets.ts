@@ -13,6 +13,7 @@ export type ReservationSheetRow = {
   pictureName: string
   pictureType: string
   pictureDataUrl: string
+  qrCodeDataUrl: string
   lc: string
   department: string
   position: string
@@ -23,6 +24,14 @@ export type ReservationSheetRow = {
   allergies: string
   comfort: string
   comingFor: string
+  goodieTshirt: string
+  goodieTshirtSize: string
+  goodieBadge: string
+  goodieBadgeQuantity: string
+  goodieWristband: string
+  goodieWristbandQuantity: string
+  goodieCap: string
+  goodieCapQuantity: string
   feeAgreement: boolean
   createdAt: string
 }

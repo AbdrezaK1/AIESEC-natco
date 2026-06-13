@@ -55,7 +55,7 @@ Restart `npm run dev` after changing `.env.local`.
 
 For Vercel, add the same `GOOGLE_SHEETS_WEBHOOK_URL` value in Project Settings -> Environment Variables, then redeploy. The URL should be the deployed Apps Script `/exec` URL.
 
-If the form fields or stats logic change, paste the latest `google-sheets-apps-script.js` into Apps Script and deploy a new web app version. The script also saves uploaded smiling pictures to Google Drive and writes the Drive link into the sheet.
+If the form fields or stats logic change, paste the latest `google-sheets-apps-script.js` into Apps Script and deploy a new web app version. The script saves uploaded smiling pictures and QR passes to Google Drive, then writes both Drive links into the sheet.
 
 ## Countdown Timer
 

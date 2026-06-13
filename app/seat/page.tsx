@@ -5,6 +5,8 @@ const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Co
 const departments = ['MX', 'BD', 'MKT', 'FL', 'OGX', 'PM&IGV']
 const positions = ['Member (newbie)', 'Member (oldie)', 'MM', 'LCVP', 'LCP', 'Alumni']
 const ratingOptions = Array.from({ length: 10 }, (_, index) => String(index + 1))
+const tshirtSizes = ['S', 'M', 'L', 'XL', 'XXL']
+const goodieChoiceOptions = ['No', 'Yes']
 
 type FormState = {
   privacyCertified: boolean
@@ -28,6 +30,14 @@ type FormState = {
   allergies: string
   comfort: string
   comingFor: string
+  goodieTshirt: string
+  goodieTshirtSize: string
+  goodieBadge: string
+  goodieBadgeQuantity: string
+  goodieWristband: string
+  goodieWristbandQuantity: string
+  goodieCap: string
+  goodieCapQuantity: string
   feeAgreement: boolean
 }
 
@@ -60,6 +70,14 @@ const initialForm: FormState = {
   allergies: '',
   comfort: '',
   comingFor: '',
+  goodieTshirt: 'No',
+  goodieTshirtSize: '',
+  goodieBadge: 'No',
+  goodieBadgeQuantity: '',
+  goodieWristband: 'No',
+  goodieWristbandQuantity: '',
+  goodieCap: 'No',
+  goodieCapQuantity: '',
   feeAgreement: false,
 }
 
@@ -93,6 +111,22 @@ export default function SeatPage() {
       delete next[key]
       return next
     })
+  }
+
+  const updateFields = (values: Partial<FormState>) => {
+    setForm((prev) => ({ ...prev, ...values }))
+    setErrors((prev) => {
+      const next = { ...prev }
+      Object.keys(values).forEach((key) => {
+        delete next[key]
+      })
+      return next
+    })
+  }
+
+  const hasValidQuantity = (value: string) => {
+    const quantity = Number(value)
+    return Number.isInteger(quantity) && quantity > 0
   }
 
   const handlePictureChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -183,6 +217,10 @@ export default function SeatPage() {
 
     if (targetStep === 5) {
       if (!form.comingFor) nextErrors.comingFor = 'Choose your journey'
+      if (form.goodieTshirt === 'Yes' && !form.goodieTshirtSize) nextErrors.goodieTshirtSize = 'Choose your T-shirt size'
+      if (form.goodieBadge === 'Yes' && !hasValidQuantity(form.goodieBadgeQuantity)) nextErrors.goodieBadgeQuantity = 'Choose the number of badges'
+      if (form.goodieWristband === 'Yes' && !hasValidQuantity(form.goodieWristbandQuantity)) nextErrors.goodieWristbandQuantity = 'Choose the number of wristbands'
+      if (form.goodieCap === 'Yes' && !hasValidQuantity(form.goodieCapQuantity)) nextErrors.goodieCapQuantity = 'Choose the number of caps'
       if (!form.feeAgreement) nextErrors.feeAgreement = 'You must agree before submitting.'
     }
 
@@ -272,6 +310,13 @@ export default function SeatPage() {
     errors[key] ? <p style={{ color: '#b23e23', fontSize: '12px', marginTop: '6px', fontWeight: 700 }}>{errors[key]}</p> : null
 
   const qrDownloadName = reservationId ? `${reservationId}-qr-pass.png` : 'jumanco-qr-pass.png'
+  const selectedGoodies = [
+    form.goodieTshirt === 'Yes' ? `T-shirt (${form.goodieTshirtSize || 'size pending'})` : '',
+    form.goodieBadge === 'Yes' ? `Badge x${form.goodieBadgeQuantity || '0'}` : '',
+    form.goodieWristband === 'Yes' ? `Wristband x${form.goodieWristbandQuantity || '0'}` : '',
+    form.goodieCap === 'Yes' ? `Cap x${form.goodieCapQuantity || '0'}` : '',
+  ].filter(Boolean)
+  const goodiesSummary = selectedGoodies.length ? selectedGoodies.join(', ') : 'No goodies selected'
 
   const renderTextInput = (
     key: keyof FormState,
@@ -309,7 +354,7 @@ export default function SeatPage() {
   const renderSelect = (key: keyof FormState, label: string, placeholder: string, options: string[]) => (
     <div>
       <label style={labelStyle}>{label}</label>
-      <select value={String(form[key])} onChange={(event) => updateField(key, event.target.value as never)} style={inputStyle(key)}>
+      <select aria-label={label} value={String(form[key])} onChange={(event) => updateField(key, event.target.value as never)} style={inputStyle(key)}>
         <option value="">{placeholder}</option>
         {options.map((option) => (
           <option key={option} value={option}>
@@ -317,6 +362,23 @@ export default function SeatPage() {
           </option>
         ))}
       </select>
+      {errorText(key)}
+    </div>
+  )
+
+  const renderQuantityInput = (key: keyof FormState, label: string) => (
+    <div>
+      <label style={labelStyle}>{label}</label>
+      <input
+        type="number"
+        min="1"
+        step="1"
+        aria-label={label}
+        placeholder="1"
+        value={String(form[key])}
+        onChange={(event) => updateField(key, event.target.value as never)}
+        style={inputStyle(key)}
+      />
       {errorText(key)}
     </div>
   )
@@ -396,6 +458,7 @@ export default function SeatPage() {
                     {[
                       ['Reservation ID', reservationId],
                       ['Adventure', form.comingFor],
+                      ['Goodies', goodiesSummary],
                       ['Excitement', `${form.excitement}/10`],
                       ['Allergies', form.allergies || 'None noted'],
                     ].map(([label, value]) => (
@@ -608,6 +671,116 @@ export default function SeatPage() {
                       </p>
                     </div>
                     {renderSelect('comingFor', 'You are coming for', 'Choose your journey', ['1 night', '2 nights'])}
+                    <div style={{ background: 'rgba(255,255,255,0.34)', border: '3px solid rgba(107,61,28,0.18)', borderRadius: '20px', padding: '18px' }}>
+                      <p style={{ color: '#7b5528', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px', fontWeight: 700 }}>
+                        Goodies
+                      </p>
+                      <p style={{ color: '#53361e', lineHeight: 1.8, marginBottom: '16px' }}>
+                        Choose the Juman'CO goodies you want to buy with your registration.
+                      </p>
+
+                      <div className="board-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))' }}>
+                        <div className="metric-card" style={{ display: 'grid', gap: '12px' }}>
+                          <img src="/goodies/tshirt.jpg" alt="JumanCO T-shirt" style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: '16px', border: '3px solid rgba(107,61,28,0.18)' }} />
+                          <div>
+                            <p className="board-title" style={{ fontSize: '20px', marginBottom: '6px' }}>T-shirt</p>
+                            <p style={{ color: '#6a5035', fontSize: '13px', lineHeight: 1.6 }}>If you choose it, size is required.</p>
+                          </div>
+                          <div>
+                            <label style={labelStyle}>Do you want the T-shirt?</label>
+                            <select
+                              aria-label="T-shirt goodie choice"
+                              value={form.goodieTshirt}
+                              onChange={(event) => updateFields({
+                                goodieTshirt: event.target.value,
+                                goodieTshirtSize: event.target.value === 'Yes' ? form.goodieTshirtSize : '',
+                              })}
+                              style={inputStyle('goodieTshirt')}
+                            >
+                              {goodieChoiceOptions.map((option) => (
+                                <option key={option} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          </div>
+                          {form.goodieTshirt === 'Yes' ? renderSelect('goodieTshirtSize', 'T-shirt size', 'Choose your size', tshirtSizes) : null}
+                        </div>
+
+                        <div className="metric-card" style={{ display: 'grid', gap: '12px' }}>
+                          <img src="/goodies/badge.jpg" alt="JumanCO badge" style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: '16px', border: '3px solid rgba(107,61,28,0.18)' }} />
+                          <div>
+                            <p className="board-title" style={{ fontSize: '20px', marginBottom: '6px' }}>Badge</p>
+                            <p style={{ color: '#6a5035', fontSize: '13px', lineHeight: 1.6 }}>If you choose it, quantity is required.</p>
+                          </div>
+                          <div>
+                            <label style={labelStyle}>Do you want the badge?</label>
+                            <select
+                              aria-label="Badge goodie choice"
+                              value={form.goodieBadge}
+                              onChange={(event) => updateFields({
+                                goodieBadge: event.target.value,
+                                goodieBadgeQuantity: event.target.value === 'Yes' ? form.goodieBadgeQuantity : '',
+                              })}
+                              style={inputStyle('goodieBadge')}
+                            >
+                              {goodieChoiceOptions.map((option) => (
+                                <option key={option} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          </div>
+                          {form.goodieBadge === 'Yes' ? renderQuantityInput('goodieBadgeQuantity', 'Number of badges') : null}
+                        </div>
+
+                        <div className="metric-card" style={{ display: 'grid', gap: '12px' }}>
+                          <img src="/goodies/wristband.jpg" alt="JumanCO wristband" style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: '16px', border: '3px solid rgba(107,61,28,0.18)' }} />
+                          <div>
+                            <p className="board-title" style={{ fontSize: '20px', marginBottom: '6px' }}>Wristband</p>
+                            <p style={{ color: '#6a5035', fontSize: '13px', lineHeight: 1.6 }}>If you choose it, quantity is required.</p>
+                          </div>
+                          <div>
+                            <label style={labelStyle}>Do you want the wristband?</label>
+                            <select
+                              aria-label="Wristband goodie choice"
+                              value={form.goodieWristband}
+                              onChange={(event) => updateFields({
+                                goodieWristband: event.target.value,
+                                goodieWristbandQuantity: event.target.value === 'Yes' ? form.goodieWristbandQuantity : '',
+                              })}
+                              style={inputStyle('goodieWristband')}
+                            >
+                              {goodieChoiceOptions.map((option) => (
+                                <option key={option} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          </div>
+                          {form.goodieWristband === 'Yes' ? renderQuantityInput('goodieWristbandQuantity', 'Number of wristbands') : null}
+                        </div>
+
+                        <div className="metric-card" style={{ display: 'grid', gap: '12px' }}>
+                          <img src="/goodies/cap.jpg" alt="JumanCO cap" style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: '16px', border: '3px solid rgba(107,61,28,0.18)' }} />
+                          <div>
+                            <p className="board-title" style={{ fontSize: '20px', marginBottom: '6px' }}>Cap</p>
+                            <p style={{ color: '#6a5035', fontSize: '13px', lineHeight: 1.6 }}>If you choose it, quantity is required.</p>
+                          </div>
+                          <div>
+                            <label style={labelStyle}>Do you want the cap?</label>
+                            <select
+                              aria-label="Cap goodie choice"
+                              value={form.goodieCap}
+                              onChange={(event) => updateFields({
+                                goodieCap: event.target.value,
+                                goodieCapQuantity: event.target.value === 'Yes' ? form.goodieCapQuantity : '',
+                              })}
+                              style={inputStyle('goodieCap')}
+                            >
+                              {goodieChoiceOptions.map((option) => (
+                                <option key={option} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          </div>
+                          {form.goodieCap === 'Yes' ? renderQuantityInput('goodieCapQuantity', 'Number of caps') : null}
+                        </div>
+                      </div>
+                    </div>
                     <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', color: '#4d2d16', fontWeight: 700, lineHeight: 1.5 }}>
                       <input
                         type="checkbox"
