@@ -1,13 +1,6 @@
 import Link from 'next/link'
 
-const facilities = [
-  { label: 'Main Auditorium', detail: '500 seats' },
-  { label: 'Workshop Rooms', detail: '6 rooms x 60 seats' },
-  { label: 'Exhibition Hall', detail: 'LC booths and activations' },
-  { label: 'Cafeteria', detail: '3 meals each day' },
-  { label: 'Prayer Room', detail: 'Available 24/7' },
-  { label: 'Accommodation', detail: 'On-site hostel' },
-]
+
 
 export default function LocationPage() {
   return (
@@ -18,10 +11,10 @@ export default function LocationPage() {
             Conference Venue
           </p>
           <h1 className="board-title" style={{ fontSize: 'clamp(34px, 5vw, 56px)', marginBottom: '12px' }}>
-            Venue, routes, and schedule updates.
+            Venue,and schedule updates.
           </h1>
           <p style={{ color: '#5f4930', fontSize: '16px', lineHeight: 1.8 }}>
-            June 25-27, 2026. Hôtel Meddouda El-Djamil, Algeria.
+            June 25-27, 2026. Complexe el Mountazeh, Mostaganem, Algeria.
           </p>
         </div>
 
@@ -75,7 +68,7 @@ export default function LocationPage() {
                   Basecamp
                 </p>
                 <p className="board-title" style={{ fontSize: '24px', marginBottom: '4px' }}>
-                  Hôtel Meddouda El-Djamil
+                 Complexe el Mountazeh
                 </p>
                 <p style={{ color: '#6a5035', fontSize: '13px' }}>Open the map for the exact route</p>
               </div>
@@ -92,23 +85,17 @@ export default function LocationPage() {
             >
               <div>
                 <h2 className="board-title" style={{ fontSize: '30px', marginBottom: '10px' }}>
-                  Hôtel Meddouda El-Djamil
+                  Complexe el Mountazeh
                 </h2>
                 <p style={{ color: '#5f4930', fontSize: '15px', lineHeight: 1.8, marginBottom: '14px' }}>
-                  The conference board is centered at Hôtel Meddouda El-Djamil with enough space for plenaries, workshops, accommodation, meals, and delegation movement without losing the shared atmosphere.
+                  The conference board is centered at Complexe el Mountazeh with enough space for plenaries, workshops, accommodation, meals, and delegation movement without losing the shared atmosphere.
                 </p>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {['Free WiFi', 'Prayer room', 'On-site dining', 'Shuttle service'].map((tag) => (
-                    <span key={tag} className="board-chip">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                
               </div>
 
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 <a
-                  href="https://maps.app.goo.gl/YxjNV24A6anUAdG97"
+                  href="https://maps.app.goo.gl/TjBmKMCshMGbS4hVA"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="wood-button"
@@ -123,27 +110,7 @@ export default function LocationPage() {
           </div>
         </section>
 
-        <section className="board-panel animate-in" style={{ padding: '26px', marginBottom: '22px' }}>
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <p className="section-kicker" style={{ marginBottom: '10px' }}>
-              Facilities
-            </p>
-            <h2 className="board-title" style={{ fontSize: '32px', marginBottom: '18px' }}>
-              What the venue includes
-            </h2>
-            <div className="board-grid">
-              {facilities.map((facility) => (
-                <div key={facility.label} className="metric-card">
-                  <p className="board-title" style={{ fontSize: '20px', marginBottom: '8px' }}>
-                    {facility.label}
-                  </p>
-                  <p style={{ color: '#6a5035', fontSize: '14px', lineHeight: 1.7 }}>{facility.detail}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
+        
         <section id="schedule" className="board-panel animate-in" style={{ padding: '26px', scrollMarginTop: '120px' }}>
           <div style={{ position: 'relative', zIndex: 1 }}>
             <p className="section-kicker" style={{ marginBottom: '10px' }}>
