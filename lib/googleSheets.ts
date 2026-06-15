@@ -56,7 +56,71 @@ type GoogleSheetStatsResponse = {
   error?: string
 }
 
-export async function appendReservationToGoogleSheet(row: ReservationSheetRow) {
+type GoogleSheetAppendResponse = {
+  success?: boolean
+  error?: string
+  pictureUploaded?: boolean
+  pictureError?: string
+  qrPassUploaded?: boolean
+  qrPassError?: string
+}
+
+export type GoogleSheetAppendResult = {
+  pictureUploaded: boolean
+  pictureError: string
+  qrPassUploaded: boolean
+  qrPassError: string
+}
+
+export async function appendReservationToGoogleSheet(row: ReservationSheetRow): Promise<GoogleSheetAppendResult> {
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL
+
+  if (!webhookUrl) {
+    throw new Error('GOOGLE_SHEETS_WEBHOOK_URL is not configured.')
+  }
+
+  // Strip base64 image data from the main payload so Apps Script can parse it
+  // reliably. Images are uploaded in a separate uploadAssets call below.
+  const { pictureDataUrl, pictureType, qrCodeDataUrl, ...textRow } = row
+  const reservationPayload = {
+    ...textRow,
+    sheetRow: buildReservationSheetRow(row),
+  }
+
+  const response = await fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8',
+    },
+    body: JSON.stringify(reservationPayload),
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error(`Google Sheets webhook failed with status ${response.status}`)
+  }
+
+  const responseText = await response.text()
+  console.log('Apps Script response:')
+  console.log(responseText)
+  let result: GoogleSheetAppendResponse
+  try {
+    result = JSON.parse(responseText)
+  } catch {
+    throw new Error('Google Sheets webhook did not return JSON. Check that GOOGLE_SHEETS_WEBHOOK_URL is the deployed Apps Script web app /exec URL.')
+  }
+
+  if (!result.success) {
+    throw new Error(result.error || 'Google Sheets webhook did not confirm success.')
+  }
+
+  // Now upload the images separately
+  const assetResult = await uploadReservationAssetsToGoogleSheet(row)
+
+  return assetResult
+}
+
+export async function uploadReservationAssetsToGoogleSheet(payload: ReservationSheetRow): Promise<GoogleSheetAppendResult> {
   const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL
 
   if (!webhookUrl) {
@@ -68,26 +132,79 @@ export async function appendReservationToGoogleSheet(row: ReservationSheetRow) {
     headers: {
       'Content-Type': 'text/plain;charset=utf-8',
     },
-    body: JSON.stringify(row),
+    body: JSON.stringify({
+      action: 'uploadAssets',
+      ...payload,
+      sheetRow: buildReservationSheetRow(payload),
+    }),
     cache: 'no-store',
   })
 
   if (!response.ok) {
-    throw new Error(`Google Sheets webhook failed with status ${response.status}`)
+    throw new Error(`Google Sheets asset upload failed with status ${response.status}`)
   }
 
   const responseText = await response.text()
-  let result: { success?: boolean; error?: string }
+  console.log('Apps Script response:')
+  console.log(responseText)
+  let result: GoogleSheetAppendResponse
 
   try {
     result = JSON.parse(responseText)
   } catch {
-    throw new Error('Google Sheets webhook did not return JSON. Check that GOOGLE_SHEETS_WEBHOOK_URL is the deployed Apps Script web app /exec URL.')
+    throw new Error('Google Sheets asset upload did not return JSON.')
   }
 
   if (!result.success) {
-    throw new Error(result.error || 'Google Sheets webhook did not confirm success.')
+    throw new Error(result.error || 'Google Sheets asset upload did not confirm success.')
   }
+
+  return {
+    pictureUploaded: Boolean(result.pictureUploaded),
+    pictureError: result.pictureError || '',
+    qrPassUploaded: Boolean(result.qrPassUploaded),
+    qrPassError: result.qrPassError || '',
+  }
+}
+
+function buildReservationSheetRow(row: ReservationSheetRow) {
+  return [
+    new Date().toISOString(),
+    row.id || '',
+    row.privacyCertified ? 'Yes' : 'No',
+    row.fullName || '',
+    row.wellbeing || '',
+    row.age || '',
+    row.phone || '',
+    row.email || '',
+    row.facebookLink || '',
+    row.funFact || '',
+    row.pictureName || '',
+    '',
+    row.lc || '',
+    row.department || '',
+    row.position || '',
+    row.excitement || '',
+    row.attendedNationalConference || '',
+    row.differently || '',
+    row.expectations || '',
+    row.allergies || '',
+    row.comfort || '',
+    row.comingFor || '',
+    row.feeAgreement ? 'Yes' : 'No',
+    row.createdAt || '',
+    '',
+    row.goodieTshirt || 'No',
+    row.goodieTshirtSize || '',
+    row.goodiePack || 'No pack',
+    row.goodiesTotal || '0',
+    row.goodieBadge || 'No',
+    row.goodieBadgeQuantity || '',
+    row.goodieWristband || 'No',
+    row.goodieWristbandQuantity || '',
+    row.goodieCap || 'No',
+    row.goodieCapQuantity || '',
+  ]
 }
 
 export async function getGoogleSheetRegistrationStats(): Promise<GoogleSheetRegistrationStats> {
