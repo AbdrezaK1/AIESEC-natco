@@ -20,7 +20,7 @@ export default function LiveDelegateCount({ initialCount }: LiveDelegateCountPro
 
     async function loadCount() {
       try {
-        const response = await fetch('/api/registration-stats', { cache: 'no-store' })
+        const response = await fetch('/api/registration-stats')
 
         if (!response.ok) return
 

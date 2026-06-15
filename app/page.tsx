@@ -34,7 +34,7 @@ const features = [
   },
 ]
 
-const highlights = ['3 days of conference energy', '7 active local committees on-site']
+const highlights = ['3 days of conference energy', '7 active local committees on-site','2 Official Expansions on-site']
 const countdownTarget = process.env.NEXT_PUBLIC_COUNTDOWN_TARGET || '2026-06-15T09:00:00+01:00'
 
 export default async function HomePage() {
@@ -47,6 +47,7 @@ export default async function HomePage() {
   const conferenceStats = [
     { value: <LiveDelegateCount initialCount={delegateCount} />, label: 'Delegates' },
     { value: '7', label: 'Local Committees' },
+    {value :'2', label: 'Official Expansions'},
     { value: '3', label: 'Days' },
     { value: '20+', label: 'Sessions' },
   ]

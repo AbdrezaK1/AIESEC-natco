@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import QRCode from 'qrcode'
 import { getStore } from '@/lib/store'
 import { appendReservationToGoogleSheet } from '@/lib/googleSheets'
+import { invalidateRegistrationStatsCache } from '@/lib/registrationStats'
 
 const goodiePackPrices: Record<string, number> = {
   'Starter pack': 1900,
@@ -130,6 +131,7 @@ export async function POST(req: NextRequest) {
         feeAgreement: reservation.feeAgreement,
         createdAt: reservation.createdAt,
       })
+      invalidateRegistrationStatsCache()
     } catch (sheetError) {
       sheetsSynced = false
       sheetsError = sheetError instanceof Error ? sheetError.message : 'Google Sheets sync failed'

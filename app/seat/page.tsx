@@ -1,7 +1,7 @@
 'use client'
 import { ChangeEvent, useState } from 'react'
 
-const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemen', 'LC Oran']
+const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemen', 'LC Oran','OE Batna','OE Sidi Bel abbes']
 const departments = ['MX', 'BD', 'MKT', 'FL', 'OGX', 'PM&IGV']
 const positions = ['Member (newbie)', 'Member (oldie)', 'MM', 'LCVP', 'LCP', 'Alumni']
 const ratingOptions = Array.from({ length: 10 }, (_, index) => String(index + 1))
