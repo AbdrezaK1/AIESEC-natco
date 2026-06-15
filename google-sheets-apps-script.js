@@ -1,4 +1,5 @@
 const SHEET_NAME = 'Reservations'
+const CHECKINS_SHEET_NAME = 'CheckIns'
 const SPREADSHEET_ID = '1FVYNibMYUt08VwtCQp2iyewDoSVX47ZCOF2DjD7dY_g'
 const PICTURES_FOLDER_ID = '1qbUc3qTVJOoeoCTS-7TVJSmZnSzTOsBi'
 
@@ -55,8 +56,19 @@ function authorizeSetup() {
 
 function doPost(e) {
   try {
-    const sheet = getReservationsSheet()
     const data = JSON.parse(e.postData.contents)
+<<<<<<< HEAD
+=======
+
+    // Route by action field
+    if (data.action === 'checkin') {
+      return handleCheckin(data)
+    }
+
+    // Default: new registration
+    const sheet = getReservationsSheet()
+    const pictureResult = savePicture(data)
+>>>>>>> 2992cfa (fix of pics)
 
     // Save picture and QR — log errors so they show up in Apps Script logs
     const pictureResult = savePicture(data)
@@ -124,6 +136,7 @@ function doPost(e) {
   }
 }
 
+<<<<<<< HEAD
 function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'stats') {
     try {
@@ -136,6 +149,43 @@ function doGet(e) {
     }
   }
 
+=======
+function handleCheckin(data) {
+  try {
+    const sheet = getCheckInsSheet()
+    sheet.appendRow([
+      new Date(),
+      data.delegateId || '',
+      data.eventId || '',
+      data.eventName || '',
+      data.organizer || '',
+      data.checkedInAt || new Date().toISOString(),
+    ])
+    return jsonResponse({ success: true })
+  } catch (error) {
+    return jsonResponse({ success: false, error: String(error && error.message ? error.message : error) })
+  }
+}
+
+function doGet(e) {
+  const params = (e && e.parameter) ? e.parameter : {}
+
+  // Delegate lookup for the check-in mobile app
+  if (params.action === 'lookup') {
+    return handleLookup(params.id, params.event)
+  }
+
+  // Registration stats for the website leaderboard
+  if (params.action === 'stats') {
+    try {
+      return jsonResponse(getRegistrationStats())
+    } catch (error) {
+      return jsonResponse({ success: false, error: String(error && error.message ? error.message : error) })
+    }
+  }
+
+  // Health-check (default)
+>>>>>>> 2992cfa (fix of pics)
   const status = {
     success: true,
     message: 'JumanCO Google Sheets webhook is connected.',
@@ -172,6 +222,7 @@ function doGet(e) {
   return jsonResponse(status)
 }
 
+<<<<<<< HEAD
 function getRegistrationStats() {
   const lcList = [
     'LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida',
@@ -217,6 +268,65 @@ function getRegistrationStats() {
       }
     }),
     updatedAt: new Date().toISOString(),
+=======
+function handleLookup(delegateId, eventId) {
+  try {
+    if (!delegateId) {
+      return jsonResponse({ found: false, error: 'Missing id' })
+    }
+
+    const resSheet = getReservationsSheet()
+    const resData = resSheet.getDataRange().getValues()
+    // Row 0 is headers; column 1 (index 1) is Reservation ID
+    const headerRow = resData[0]
+    const idCol = 1 // 'Reservation ID' column
+
+    let delegateRow = null
+    for (let i = 1; i < resData.length; i++) {
+      if (String(resData[i][idCol]).trim() === String(delegateId).trim()) {
+        delegateRow = resData[i]
+        break
+      }
+    }
+
+    if (!delegateRow) {
+      return jsonResponse({ found: false })
+    }
+
+    const delegate = {
+      id: delegateRow[1],
+      fullName: delegateRow[3],
+      lc: delegateRow[12],
+      department: delegateRow[13],
+      position: delegateRow[14],
+      phone: delegateRow[6],
+      email: delegateRow[7],
+      pictureUrl: delegateRow[11],
+      allergies: delegateRow[19],
+      comingFor: delegateRow[21],
+    }
+
+    // Check if already checked in to this event
+    let alreadyCheckedIn = false
+    if (eventId) {
+      const ciSheet = getCheckInsSheet()
+      const ciData = ciSheet.getDataRange().getValues()
+      // columns: 0=timestamp, 1=delegateId, 2=eventId, 3=eventName, 4=organizer, 5=checkedInAt
+      for (let i = 1; i < ciData.length; i++) {
+        if (
+          String(ciData[i][1]).trim() === String(delegateId).trim() &&
+          String(ciData[i][2]).trim() === String(eventId).trim()
+        ) {
+          alreadyCheckedIn = true
+          break
+        }
+      }
+    }
+
+    return jsonResponse({ found: true, delegate, alreadyCheckedIn })
+  } catch (error) {
+    return jsonResponse({ found: false, error: String(error && error.message ? error.message : error) })
+>>>>>>> 2992cfa (fix of pics)
   }
 }
 
@@ -271,10 +381,14 @@ function savePicture(data) {
     const bytes = Utilities.base64Decode(parts[1])
     const folder = getPicturesFolder()
     const safeName = String(data.pictureName).replace(/[\\/:*?"<>|]/g, '-')
+<<<<<<< HEAD
     const file = folder.createFile(
       Utilities.newBlob(bytes, contentType, (data.id || 'unknown') + '-' + safeName)
     )
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
+=======
+    const file = folder.createFile(Utilities.newBlob(bytes, contentType, data.id + '-' + safeName))
+>>>>>>> 2992cfa (fix of pics)
     return { url: file.getUrl(), error: '' }
   } catch (error) {
     return {
@@ -320,4 +434,73 @@ function testDriveWrite(folder) {
   )
   testFile.setTrashed(true)
   return true
+}
+
+function getRegistrationStats() {
+  const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemen', 'LC Oran']
+  const counts = {}
+  const sheet = getReservationsSheet()
+  const values = sheet.getDataRange().getValues()
+
+  localCommittees.forEach(function (lc) {
+    counts[lc] = 0
+  })
+
+  const rows = values.slice(1).filter(function (row) {
+    return row[1] || row[3] || row[12]
+  })
+
+  rows.forEach(function (row) {
+    const lc = String(row[12] || '').trim()
+    if (lc) {
+      counts[lc] = (counts[lc] || 0) + 1
+    }
+  })
+
+  const ranked = localCommittees
+    .map(function (lc, order) {
+      return { lc: lc, order: order, count: counts[lc] || 0 }
+    })
+    .sort(function (a, b) {
+      return b.count - a.count || a.order - b.order
+    })
+
+  const highestCount = Math.max.apply(null, [1].concat(ranked.map(function (item) {
+    return item.count
+  })))
+
+  return {
+    success: true,
+    source: 'google-sheets',
+    totalDelegates: rows.length,
+    lcLeaderboard: ranked.map(function (item, index) {
+      return {
+        lc: item.lc,
+        order: item.order,
+        count: item.count,
+        rank: index + 1,
+        progress: item.count === 0 ? 0 : Math.max(10, Math.round((item.count / highestCount) * 100)),
+      }
+    }),
+    updatedAt: new Date().toISOString(),
+  }
+}
+
+function getCheckInsSheet() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID)
+  let sheet = spreadsheet.getSheetByName(CHECKINS_SHEET_NAME)
+
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(CHECKINS_SHEET_NAME)
+    sheet.appendRow([
+      'Recorded At',
+      'Delegate ID',
+      'Event ID',
+      'Event Name',
+      'Organizer',
+      'Checked In At',
+    ])
+  }
+
+  return sheet
 }

@@ -11,3 +11,9 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 aiesec-natco/
+
+# Flutter
+flutter_checkin/.dart_tool/
+flutter_checkin/build/
+flutter_checkin/.flutter-plugins
+flutter_checkin/.flutter-plugins-dependencies
