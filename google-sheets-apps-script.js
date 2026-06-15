@@ -24,6 +24,7 @@ function doPost(e) {
 
     const sheet = getReservationsSheet()
     const pictureResult = savePicture(data)
+    const qrResult = saveQrPass(data)
 
     sheet.appendRow([
       new Date(),
@@ -50,12 +51,15 @@ function doPost(e) {
       data.comingFor || '',
       data.feeAgreement ? 'Yes' : 'No',
       data.createdAt || '',
+      qrResult.url || qrResult.error || '',
     ])
 
     return jsonResponse({
       success: true,
       pictureUploaded: Boolean(pictureResult.url),
       pictureError: pictureResult.error || '',
+      qrPassUploaded: Boolean(qrResult.url),
+      qrPassError: qrResult.error || '',
     })
   } catch (error) {
     return jsonResponse({ success: false, error: String(error && error.message ? error.message : error) })
@@ -207,7 +211,7 @@ function getReservationsSheet() {
       'Fun Fact', 'Picture Name', 'Picture Drive Link', 'LC', 'Department',
       'Current Position', 'Excitement Rating', 'Attended National Conference',
       'Done Differently', 'Adventure Expectations', 'Food Allergies',
-      'Comfort Notes', 'Coming For', 'Fee Agreement', 'Created At',
+      'Comfort Notes', 'Coming For', 'Fee Agreement', 'Created At', 'QR Pass Drive Link',
     ])
   }
 
@@ -233,6 +237,26 @@ function savePicture(data) {
     return { url: file.getUrl(), error: '' }
   } catch (error) {
     return { url: '', error: 'Drive upload failed: ' + String(error && error.message ? error.message : error) }
+  }
+}
+
+function saveQrPass(data) {
+  if (!data.qrCodeDataUrl || !data.id) {
+    return { url: '', error: '' }
+  }
+
+  const parts = data.qrCodeDataUrl.split(',')
+  if (parts.length < 2) {
+    return { url: '', error: 'Invalid QR code data.' }
+  }
+
+  try {
+    const bytes = Utilities.base64Decode(parts[1])
+    const folder = getPicturesFolder()
+    const file = folder.createFile(Utilities.newBlob(bytes, 'image/png', data.id + '-qr-pass.png'))
+    return { url: file.getUrl(), error: '' }
+  } catch (error) {
+    return { url: '', error: 'QR pass upload failed: ' + String(error && error.message ? error.message : error) }
   }
 }
 
