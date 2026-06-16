@@ -98,8 +98,8 @@ const initialForm: FormState = {
 
 const sectionTitles = [
   'Privacy Policy',
-  'State Your Name, Player',
   'Your AIESEC Identity',
+  'State Your Name, Player',
   'Adventure Readiness',
   'Real Talk',
 ]
@@ -208,6 +208,12 @@ export default function SeatPage() {
     }
 
     if (targetStep === 2) {
+      if (!form.lc) nextErrors.lc = 'Select your LC'
+      if (!form.position) nextErrors.position = 'Select your current position'
+      if (form.position !== 'LCP' && form.position !== 'Alumni' && !form.department) nextErrors.department = 'Select your department'
+    }
+
+    if (targetStep === 3) {
       if (!form.fullName.trim()) {
         nextErrors.fullName = 'Required'
       } else if (!/^[a-zA-ZÀ-ÿ؀-ۿ\s'-]+$/.test(form.fullName.trim())) {
@@ -231,7 +237,7 @@ export default function SeatPage() {
       }
       if (!form.email.trim()) {
         nextErrors.email = 'Required'
-      } else if (!form.email.trim().endsWith('@aiesec.net')) {
+      } else if (form.position !== 'Alumni' && !form.email.trim().endsWith('@aiesec.net')) {
         nextErrors.email = 'Must be an @aiesec.net email'
       }
       if (!form.facebookLink.trim()) {
@@ -241,12 +247,6 @@ export default function SeatPage() {
       }
       if (!form.funFact.trim()) nextErrors.funFact = 'Required'
       if (!form.pictureDataUrl) nextErrors.pictureDataUrl = 'Please add a smiling picture.'
-    }
-
-    if (targetStep === 3) {
-      if (!form.lc) nextErrors.lc = 'Select your LC'
-      if (!form.position) nextErrors.position = 'Select your current position'
-      if (form.position !== 'LCP' && !form.department) nextErrors.department = 'Select your department'
     }
 
     if (targetStep === 4) {
@@ -657,6 +657,14 @@ export default function SeatPage() {
 
                 {step === 2 ? (
                   <>
+                    {renderSelect('lc', 'Your LC', 'Select your LC', localCommittees)}
+                    {renderSelect('position', 'Your current position', 'Select your current position', positions)}
+                    {form.position !== 'LCP' && form.position !== 'Alumni' ? renderSelect('department', 'Your Department', 'Select your department', departments) : null}
+                  </>
+                ) : null}
+
+                {step === 3 ? (
+                  <>
                     <div>
                       <label style={labelStyle}>State your name, player.</label>
                       <input
@@ -711,11 +719,14 @@ export default function SeatPage() {
                       <label style={labelStyle}>Email Address</label>
                       <input
                         type="email"
-                        placeholder="you@aiesec.net"
+                        placeholder={isAlumni ? 'your@email.com' : 'you@aiesec.net'}
                         value={form.email}
                         onChange={(e) => updateField('email', e.target.value)}
                         style={inputStyle('email')}
                       />
+                      {isAlumni ? (
+                        <p style={{ color: '#7b5528', fontSize: '12px', marginTop: '6px', fontWeight: 600 }}>As an alumni, any email address is accepted.</p>
+                      ) : null}
                       {errorText('email')}
                     </div>
                     <div>
@@ -736,14 +747,6 @@ export default function SeatPage() {
                       {form.pictureName ? <p style={{ color: '#4f7a4a', fontSize: '12px', marginTop: '6px', fontWeight: 700 }}>{form.pictureName} selected</p> : null}
                       {errorText('pictureDataUrl')}
                     </div>
-                  </>
-                ) : null}
-
-                {step === 3 ? (
-                  <>
-                    {renderSelect('lc', 'Your LC', 'Select your LC', localCommittees)}
-                    {renderSelect('position', 'Your current position', 'Select your current position', positions)}
-                    {form.position !== 'LCP' ? renderSelect('department', 'Your Department', 'Select your department', departments) : null}
                   </>
                 ) : null}
 
