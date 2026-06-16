@@ -271,7 +271,7 @@ function testDriveWrite(folder) {
 }
 
 function getRegistrationStats() {
-  const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemen', 'LC Oran']
+  const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemcen', 'LC Oran']
   const counts = {}
   const sheet = getReservationsSheet()
   const values = sheet.getDataRange().getValues()
