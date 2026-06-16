@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from 'react'
 
 const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemen', 'LC Oran','OE Batna','OE Sidi Bel abbes']
 const departments = ['MX', 'BD', 'MKT', 'FL', 'OGX', 'PM&IGV']
-const positions = ['Member (newbie)', 'Member (oldie)', 'MM', 'LCVP', 'LCP', 'Alumni']
+const positions = ['Member (newbie)', 'Member (oldie)', 'MM', 'LCVP', 'LCP', 'EST', 'Alumni']
 const ratingOptions = Array.from({ length: 10 }, (_, index) => String(index + 1))
 const tshirtSizes = ['S', 'M', 'L', 'XL', 'XXL']
 const goodieChoiceOptions = ['No', 'Yes']
@@ -208,20 +208,45 @@ export default function SeatPage() {
     }
 
     if (targetStep === 2) {
-      if (!form.fullName.trim()) nextErrors.fullName = 'Required'
-      if (!form.wellbeing.trim()) nextErrors.wellbeing = 'Required'
-      if (!form.age.trim()) nextErrors.age = 'Required'
-      if (!form.phone.trim()) nextErrors.phone = 'Required'
-      if (!form.email.trim() || !form.email.includes('@')) nextErrors.email = 'Valid email required'
-      if (!form.facebookLink.trim()) nextErrors.facebookLink = 'Required'
+      if (!form.fullName.trim()) {
+        nextErrors.fullName = 'Required'
+      } else if (!/^[a-zA-ZÀ-ÿ؀-ۿ\s'-]+$/.test(form.fullName.trim())) {
+        nextErrors.fullName = 'Letters only'
+      }
+      if (!form.wellbeing.trim()) {
+        nextErrors.wellbeing = 'Required'
+      } else if (!/^[a-zA-ZÀ-ÿ؀-ۿ\s.,!?'"()-]+$/.test(form.wellbeing.trim())) {
+        nextErrors.wellbeing = 'Letters only'
+      }
+      if (!form.age.trim()) {
+        nextErrors.age = 'Required'
+      } else if (!/^\d+$/.test(form.age.trim())) {
+        nextErrors.age = 'Numbers only'
+      }
+      const phoneDigits = form.phone.replace(/^\+213/, '')
+      if (!phoneDigits) {
+        nextErrors.phone = 'Required'
+      } else if (!/^\d{9}$/.test(phoneDigits)) {
+        nextErrors.phone = 'Enter 9 digits after +213'
+      }
+      if (!form.email.trim()) {
+        nextErrors.email = 'Required'
+      } else if (!form.email.trim().endsWith('@aiesec.net')) {
+        nextErrors.email = 'Must be an @aiesec.net email'
+      }
+      if (!form.facebookLink.trim()) {
+        nextErrors.facebookLink = 'Required'
+      } else if (!form.facebookLink.includes('facebook.com') && !form.facebookLink.includes('fb.com')) {
+        nextErrors.facebookLink = 'Enter a valid Facebook profile link (facebook.com)'
+      }
       if (!form.funFact.trim()) nextErrors.funFact = 'Required'
       if (!form.pictureDataUrl) nextErrors.pictureDataUrl = 'Please add a smiling picture.'
     }
 
     if (targetStep === 3) {
       if (!form.lc) nextErrors.lc = 'Select your LC'
-      if (!form.department) nextErrors.department = 'Select your department'
       if (!form.position) nextErrors.position = 'Select your current position'
+      if (form.position !== 'LCP' && !form.department) nextErrors.department = 'Select your department'
     }
 
     if (targetStep === 4) {
@@ -326,6 +351,11 @@ export default function SeatPage() {
   const errorText = (key: keyof FormState) =>
     errors[key] ? <p style={{ color: '#b23e23', fontSize: '12px', marginTop: '6px', fontWeight: 700 }}>{errors[key]}</p> : null
 
+  const isAlumni = form.position === 'Alumni'
+  const conferenceFee = !form.comingFor ? 0
+    : form.comingFor === '1 night' ? 3500
+    : isAlumni ? 7000 : 6400
+
   const qrDownloadName = reservationId ? `${reservationId}-qr-pass.png` : 'jumanco-qr-pass.png'
   const selectedPack = goodiePackOptions.find((pack) => pack.name === form.goodiePack) || goodiePackOptions[0]
   const packIncludesTshirt = selectedPack.name !== 'No pack'
@@ -343,25 +373,6 @@ export default function SeatPage() {
     form.goodieCap === 'Yes' ? `Cap x${form.goodieCapQuantity || '0'} - ${hasValidQuantity(form.goodieCapQuantity) ? Number(form.goodieCapQuantity) * singleGoodiePrices.cap : 0} DA` : '',
   ].filter(Boolean)
   const goodiesSummary = selectedGoodies.length ? `${selectedGoodies.join(', ')}. Total: ${goodiesTotal} DA` : 'No goodies selected'
-
-  const renderTextInput = (
-    key: keyof FormState,
-    label: string,
-    placeholder: string,
-    type = 'text',
-  ) => (
-    <div>
-      <label style={labelStyle}>{label}</label>
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={String(form[key])}
-        onChange={(event) => updateField(key, event.target.value as never)}
-        style={inputStyle(key)}
-      />
-      {errorText(key)}
-    </div>
-  )
 
   const renderTextarea = (key: keyof FormState, label: string, placeholder: string, rows = 3) => (
     <div>
@@ -646,14 +657,78 @@ export default function SeatPage() {
 
                 {step === 2 ? (
                   <>
-                    {renderTextInput('fullName', 'State your name, player.', 'Your full name')}
-                    {renderTextarea('wellbeing', 'How have you been holding up lately?', 'Tell us how you are arriving to this adventure.')}
-                    <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '18px' }}>
-                      {renderTextInput('age', 'Your age', '18', 'number')}
-                      {renderTextInput('phone', 'Phone Number (WhatsApp)', '+213 XXX XXX XXX', 'tel')}
+                    <div>
+                      <label style={labelStyle}>State your name, player.</label>
+                      <input
+                        type="text"
+                        placeholder="Your full name"
+                        value={form.fullName}
+                        onChange={(e) => updateField('fullName', e.target.value.replace(/[^a-zA-ZÀ-ÿ؀-ۿ\s'-]/g, ''))}
+                        style={inputStyle('fullName')}
+                      />
+                      {errorText('fullName')}
                     </div>
-                    {renderTextInput('email', 'Email Address', 'you@example.com', 'email')}
-                    {renderTextInput('facebookLink', 'Facebook Link', 'https://facebook.com/your.profile', 'url')}
+                    <div>
+                      <label style={labelStyle}>How have you been holding up lately?</label>
+                      <textarea
+                        rows={3}
+                        placeholder="Tell us how you are arriving to this adventure."
+                        value={form.wellbeing}
+                        onChange={(e) => updateField('wellbeing', e.target.value.replace(/[^a-zA-ZÀ-ÿ؀-ۿ\s.,!?'"()-]/g, ''))}
+                        style={{ ...inputStyle('wellbeing'), resize: 'vertical' }}
+                      />
+                      {errorText('wellbeing')}
+                    </div>
+                    <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '18px' }}>
+                      <div>
+                        <label style={labelStyle}>Your age</label>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          placeholder="18"
+                          value={form.age}
+                          onChange={(e) => updateField('age', e.target.value.replace(/\D/g, ''))}
+                          style={inputStyle('age')}
+                        />
+                        {errorText('age')}
+                      </div>
+                      <div>
+                        <label style={labelStyle}>Phone Number (WhatsApp)</label>
+                        <div style={{ display: 'flex', ...inputStyle('phone'), padding: 0, overflow: 'hidden', alignItems: 'stretch' }}>
+                          <span style={{ padding: '0 12px', background: 'rgba(159,108,55,0.12)', borderRight: '2px solid #9f6c37', color: '#51301a', fontWeight: 700, display: 'flex', alignItems: 'center', flexShrink: 0, fontSize: '14px' }}>+213</span>
+                          <input
+                            type="tel"
+                            placeholder="XXX XXX XXX"
+                            value={form.phone.replace(/^\+213/, '')}
+                            onChange={(e) => updateField('phone', '+213' + e.target.value.replace(/\D/g, '').slice(0, 9))}
+                            style={{ border: 'none', background: 'transparent', flex: 1, padding: '12px 14px', color: '#51301a', outline: 'none', fontSize: '14px' }}
+                          />
+                        </div>
+                        {errorText('phone')}
+                      </div>
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Email Address</label>
+                      <input
+                        type="email"
+                        placeholder="you@aiesec.net"
+                        value={form.email}
+                        onChange={(e) => updateField('email', e.target.value)}
+                        style={inputStyle('email')}
+                      />
+                      {errorText('email')}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Facebook Link</label>
+                      <input
+                        type="url"
+                        placeholder="https://facebook.com/your.profile"
+                        value={form.facebookLink}
+                        onChange={(e) => updateField('facebookLink', e.target.value)}
+                        style={inputStyle('facebookLink')}
+                      />
+                      {errorText('facebookLink')}
+                    </div>
                     {renderTextarea('funFact', "Every player has a hidden trait... What's a fun fact about you?", 'Drop the lore here.')}
                     <div>
                       <label style={labelStyle}>A picture of you smiling :)</label>
@@ -667,8 +742,8 @@ export default function SeatPage() {
                 {step === 3 ? (
                   <>
                     {renderSelect('lc', 'Your LC', 'Select your LC', localCommittees)}
-                    {renderSelect('department', 'Your Department', 'Select your department', departments)}
                     {renderSelect('position', 'Your current position', 'Select your current position', positions)}
+                    {form.position !== 'LCP' ? renderSelect('department', 'Your Department', 'Select your department', departments) : null}
                   </>
                 ) : null}
 
@@ -693,8 +768,12 @@ export default function SeatPage() {
                         The game is starting... Ra7 t9le3 l'avion, be quick and hop in!
                       </p>
                       <p style={{ color: '#53361e', lineHeight: 1.8, marginTop: '10px' }}>
-                        Choose your journey: 3 days / 2 nights - meals + accommodation included -7000 DA. 1 night only - .... DA.
+                        Choose your journey:
                       </p>
+                      <ul style={{ color: '#53361e', lineHeight: 2, marginTop: '6px', paddingLeft: '20px' }}>
+                        <li>1 night — 3 500 DA</li>
+                        <li>2 nights (3 days, meals + accommodation included) — {isAlumni ? '7 000' : '6 400'} DA</li>
+                      </ul>
                     </div>
                     {renderSelect('comingFor', 'You are coming for', 'Choose your journey', ['1 night', '2 nights'])}
                     <div style={{ background: 'rgba(255,255,255,0.34)', border: '3px solid rgba(107,61,28,0.18)', borderRadius: '20px', padding: '18px' }}>
@@ -868,7 +947,7 @@ export default function SeatPage() {
                         onChange={(event) => updateField('feeAgreement', event.target.checked)}
                         style={{ width: '20px', height: '20px', marginTop: '2px', flexShrink: 0 }}
                       />
-                      By submitting this form, I agree that I am going to pay 7000 DA as fees for this conference attendance, even if I will not be present.
+                      By submitting this form, I agree that I am going to pay {conferenceFee} DA as fees for this conference attendance{goodiesTotal > 0 ? `, and ${goodiesTotal} DA for goodies` : ''}, even if I will not be present.
                     </label>
                     {errorText('feeAgreement')}
                   </>
