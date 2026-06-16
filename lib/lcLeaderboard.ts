@@ -1,6 +1,6 @@
 import type { Reservation } from './store'
 
-export const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemen', 'LC Oran']
+export const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemcen', 'LC Oran']
 
 export type LcLeaderboardItem = {
   lc: string
