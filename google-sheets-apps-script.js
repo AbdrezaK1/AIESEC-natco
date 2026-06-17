@@ -283,7 +283,8 @@ function getRegistrationStats() {
   })
 
   rows.forEach(function (row) {
-    const lc = String(row[12] || '').trim()
+    let lc = String(row[12] || '').trim()
+    if (lc === 'LC Tlemen') lc = 'LC Tlemcen'
     if (lc) counts[lc] = (counts[lc] || 0) + 1
   })
 
