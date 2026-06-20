@@ -1,4 +1,4 @@
-const SHEET_NAME = 'Reservations'
+const SHEET_NAME = 'Reservations2'
 const CHECKINS_SHEET_NAME = 'CheckIns'
 const SPREADSHEET_ID = '1FVYNibMYUt08VwtCQp2iyewDoSVX47ZCOF2DjD7dY_g'
 const PICTURES_FOLDER_ID = '1qbUc3qTVJOoeoCTS-7TVJSmZnSzTOsBi'
@@ -31,41 +31,41 @@ function doPost(e) {
     const qrResult = saveQrPass(data)
 
     sheet.appendRow([
-      new Date(),
-      data.id || '',
-      data.privacyCertified ? 'Yes' : 'No',
-      data.fullName || '',
-      data.wellbeing || '',
-      data.age || '',
-      data.phone || '',
-      data.email || '',
-      data.facebookLink || '',
-      data.funFact || '',
-      data.pictureName || '',
-      pictureResult.url || pictureResult.error || '',
-      data.lc || '',
-      data.department || '',
-      data.position || '',
-      data.excitement || '',
-      data.attendedNationalConference || '',
-      data.differently || '',
-      data.expectations || '',
-      data.allergies || '',
-      data.comfort || '',
-      data.comingFor || '',
-      data.feeAgreement ? 'Yes' : 'No',
-      data.createdAt || '',
-      qrResult.url || qrResult.error || '',
-      data.goodieTshirt || 'No',
-      data.goodieTshirtSize || '',
-      data.goodiePack || 'No pack',
-      data.goodiesTotal || '0',
-      data.goodieBadge || 'No',
-      data.goodieBadgeQuantity || '',
-      data.goodieWristband || 'No',
-      data.goodieWristbandQuantity || '',
-      data.goodieCap || 'No',
-      data.goodieCapQuantity || '',
+      new Date(),                                       // col 1:  Received At
+      data.id || '',                                    // col 2:  Reservation ID
+      data.privacyCertified ? 'Yes' : 'No',            // col 3:  Privacy Certified
+      data.fullName || '',                              // col 4:  Full Name
+      data.wellbeing || '',                             // col 5:  Holding Up Lately
+      data.age || '',                                   // col 6:  Age
+      data.phone || '',                                 // col 7:  WhatsApp Phone
+      data.facebookLink || '',                          // col 8:  Facebook Link
+      data.funFact || '',                               // col 9:  Fun Fact
+      data.pictureName || '',                           // col 10: Picture Name
+      pictureResult.url || pictureResult.error || '',   // col 11: Picture Drive Link
+      data.lc || '',                                    // col 12: LC
+      data.department || '',                            // col 13: Department
+      data.position || '',                              // col 14: Current Position
+      data.excitement || '',                            // col 15: Excitement Rating
+      data.attendedNationalConference || '',            // col 16: Attended National Conference
+      data.differently || '',                           // col 17: Done Differently
+      data.expectations || '',                          // col 18: Adventure Expectations
+      data.allergies || '',                             // col 19: Food Allergies
+      data.comfort || '',                               // col 20: Comfort Notes
+      data.comingFor || '',                             // col 21: Coming For
+      data.feeAgreement ? 'Yes' : 'No',                // col 22: Fee Agreement
+      data.createdAt || '',                             // col 23: Created At
+      qrResult.url || qrResult.error || '',             // col 24: QR Pass Drive Link
+      '',                                               // col 25: Goodie T-shirt (removed)
+      '',                                               // col 26: Goodie T-shirt Size (removed)
+      '',                                               // col 27: Goodie Pack (removed)
+      data.email || '',                                 // col 28: Email
+      data.goodiesTotal || '0',                         // col 29: Goodies Total
+      '',                                               // col 30: Goodie Pin (removed)
+      '',                                               // col 31: Goodie Pin Quantity (removed)
+      data.goodieWristband || 'No',                     // col 32: Goodie Bracelet
+      data.goodieWristbandQuantity || '',               // col 33: Goodie Bracelet Quantity
+      '',                                               // col 34: Goodie Cap (removed)
+      '',                                               // col 35: Goodie Cap Quantity (removed)
     ])
 
     return jsonResponse({
@@ -90,8 +90,8 @@ function handleUploadAssets(data) {
       const values = sheet.getDataRange().getValues()
       for (let i = values.length - 1; i >= 1; i--) {
         if (String(values[i][1]).trim() === String(data.id).trim()) {
-          if (pictureResult.url) sheet.getRange(i + 1, 12).setValue(pictureResult.url)
-          if (qrResult.url) sheet.getRange(i + 1, 25).setValue(qrResult.url)
+          if (pictureResult.url) sheet.getRange(i + 1, 11).setValue(pictureResult.url)
+          if (qrResult.url) sheet.getRange(i + 1, 24).setValue(qrResult.url)
           break
         }
       }
@@ -200,16 +200,16 @@ function handleLookup(delegateId, eventId) {
     }
 
     const delegate = {
-      id: delegateRow[1],
-      fullName: delegateRow[3],
-      lc: delegateRow[12],
-      department: delegateRow[13],
-      position: delegateRow[14],
-      phone: delegateRow[6],
-      email: delegateRow[7],
-      pictureUrl: delegateRow[11],
-      allergies: delegateRow[19],
-      comingFor: delegateRow[21],
+      id: delegateRow[1],           // col 2:  Reservation ID
+      fullName: delegateRow[3],     // col 4:  Full Name
+      lc: delegateRow[11],          // col 12: LC
+      department: delegateRow[12],  // col 13: Department
+      position: delegateRow[13],    // col 14: Current Position
+      phone: delegateRow[6],        // col 7:  WhatsApp Phone
+      email: delegateRow[27],       // col 28: Email
+      pictureUrl: delegateRow[10],  // col 11: Picture Drive Link
+      allergies: delegateRow[18],   // col 19: Food Allergies
+      comingFor: delegateRow[20],   // col 21: Coming For
     }
 
     let alreadyCheckedIn = false
@@ -250,11 +250,16 @@ function getReservationsSheet() {
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
       'Received At', 'Reservation ID', 'Privacy Certified', 'Full Name',
-      'Holding Up Lately', 'Age', 'WhatsApp Phone', 'Email', 'Facebook Link',
-      'Fun Fact', 'Picture Name', 'Picture Drive Link', 'LC', 'Department',
-      'Current Position', 'Excitement Rating', 'Attended National Conference',
-      'Done Differently', 'Adventure Expectations', 'Food Allergies',
-      'Comfort Notes', 'Coming For', 'Fee Agreement', 'Created At', 'QR Pass Drive Link',
+      'Holding Up Lately', 'Age', 'WhatsApp Phone', 'Facebook Link', 'Fun Fact',
+      'Picture Name', 'Picture Drive Link', 'LC', 'Department', 'Current Position',
+      'Excitement Rating', 'Attended National Conference', 'Done Differently',
+      'Adventure Expectations', 'Food Allergies', 'Comfort Notes', 'Coming For',
+      'Fee Agreement', 'Created At', 'QR Pass Drive Link',
+      'Goodie T-shirt', 'Goodie T-shirt Size', 'Goodie Pack',
+      'Email', 'Goodies Total',
+      'Goodie Pin', 'Goodie Pin Quantity',
+      'Goodie Bracelet', 'Goodie Bracelet Quantity',
+      'Goodie Cap', 'Goodie Cap Quantity',
     ])
   }
 
@@ -322,11 +327,11 @@ function getRegistrationStats() {
   localCommittees.forEach(function (lc) { counts[lc] = 0 })
 
   const rows = values.slice(1).filter(function (row) {
-    return row[1] || row[3] || row[12]
+    return row[1] || row[3] || row[11]
   })
 
   rows.forEach(function (row) {
-    const lc = String(row[12] || '').trim()
+    const lc = String(row[11] || '').trim()
     if (lc) counts[lc] = (counts[lc] || 0) + 1
   })
 

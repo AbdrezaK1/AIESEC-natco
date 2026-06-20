@@ -162,34 +162,41 @@ export async function uploadReservationAssetsToGoogleSheet(payload: ReservationS
 
 function buildReservationSheetRow(row: ReservationSheetRow) {
   return [
-    new Date().toISOString(),
-    row.id || '',
-    row.privacyCertified ? 'Yes' : 'No',
-    row.fullName || '',
-    row.wellbeing || '',
-    row.age || '',
-    row.phone || '',
-    row.email || '',
-    row.facebookLink || '',
-    row.funFact || '',
-    row.pictureName || '',
-    '',
-    row.lc || '',
-    row.department || '',
-    row.position || '',
-    row.excitement || '',
-    row.attendedNationalConference || '',
-    row.differently || '',
-    row.expectations || '',
-    row.allergies || '',
-    row.comfort || '',
-    row.comingFor || '',
-    row.feeAgreement ? 'Yes' : 'No',
-    row.createdAt || '',
-    '',
-    row.goodiesTotal || '0',
-    row.goodieWristband || 'No',
-    row.goodieWristbandQuantity || '',
+    new Date().toISOString(),          // col 1:  Received At
+    row.id || '',                      // col 2:  Reservation ID
+    row.privacyCertified ? 'Yes' : 'No', // col 3: Privacy Certified
+    row.fullName || '',                // col 4:  Full Name
+    row.wellbeing || '',               // col 5:  Holding Up Lately
+    row.age || '',                     // col 6:  Age
+    row.phone || '',                   // col 7:  WhatsApp Phone
+    row.facebookLink || '',            // col 8:  Facebook Link
+    row.funFact || '',                 // col 9:  Fun Fact
+    row.pictureName || '',             // col 10: Picture Name
+    '',                                // col 11: Picture Drive Link (filled by uploadAssets)
+    row.lc || '',                      // col 12: LC
+    row.department || '',              // col 13: Department
+    row.position || '',                // col 14: Current Position
+    row.excitement || '',              // col 15: Excitement Rating
+    row.attendedNationalConference || '', // col 16: Attended National Conference
+    row.differently || '',             // col 17: Done Differently
+    row.expectations || '',            // col 18: Adventure Expectations
+    row.allergies || '',               // col 19: Food Allergies
+    row.comfort || '',                 // col 20: Comfort Notes
+    row.comingFor || '',               // col 21: Coming For
+    row.feeAgreement ? 'Yes' : 'No',   // col 22: Fee Agreement
+    row.createdAt || '',               // col 23: Created At
+    '',                                // col 24: QR Pass Drive Link (filled by uploadAssets)
+    '',                                // col 25: Goodie T-shirt (removed)
+    '',                                // col 26: Goodie T-shirt Size (removed)
+    '',                                // col 27: Goodie Pack (removed)
+    row.email || '',                   // col 28: Email
+    row.goodiesTotal || '0',           // col 29: Goodies Total
+    '',                                // col 30: Goodie Pin (removed)
+    '',                                // col 31: Goodie Pin Quantity (removed)
+    row.goodieWristband || 'No',       // col 32: Goodie Bracelet
+    row.goodieWristbandQuantity || '', // col 33: Goodie Bracelet Quantity
+    '',                                // col 34: Goodie Cap (removed)
+    '',                                // col 35: Goodie Cap Quantity (removed)
   ]
 }
 
