@@ -24,16 +24,9 @@ export type ReservationSheetRow = {
   allergies: string
   comfort: string
   comingFor: string
-  goodieTshirt: string
-  goodieTshirtSize: string
-  goodiePack: string
   goodiesTotal: string
-  goodieBadge: string
-  goodieBadgeQuantity: string
   goodieWristband: string
   goodieWristbandQuantity: string
-  goodieCap: string
-  goodieCapQuantity: string
   feeAgreement: boolean
   createdAt: string
 }
@@ -194,16 +187,9 @@ function buildReservationSheetRow(row: ReservationSheetRow) {
     row.feeAgreement ? 'Yes' : 'No',
     row.createdAt || '',
     '',
-    row.goodieTshirt || 'No',
-    row.goodieTshirtSize || '',
-    row.goodiePack || 'No pack',
     row.goodiesTotal || '0',
-    row.goodieBadge || 'No',
-    row.goodieBadgeQuantity || '',
     row.goodieWristband || 'No',
     row.goodieWristbandQuantity || '',
-    row.goodieCap || 'No',
-    row.goodieCapQuantity || '',
   ]
 }
 
