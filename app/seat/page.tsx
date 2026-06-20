@@ -23,6 +23,7 @@ const singleGoodiePrices = {
   cap: 1600,
 }
 
+
 type FormState = {
   privacyCertified: boolean
   fullName: string
