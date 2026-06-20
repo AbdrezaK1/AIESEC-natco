@@ -1,7 +1,7 @@
 'use client'
 import { ChangeEvent, useState } from 'react'
 
-const REGISTRATION_OPEN = false
+const REGISTRATION_OPEN = true
 
 const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemcen', 'LC Oran','OE Batna','OE Sidi Bel abbes']
 const departments = ['MX', 'BD', 'MKT', 'FL', 'OGX', 'PM&IGV']
