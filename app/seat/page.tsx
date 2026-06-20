@@ -384,7 +384,7 @@ export default function SeatPage() {
             </p>
             <div style={{ background: 'rgba(255,212,45,0.22)', border: '3px solid rgba(106,52,22,0.2)', borderRadius: '18px', padding: '16px 20px', marginBottom: '28px' }}>
               <p style={{ color: '#6a3416', fontWeight: 700, fontSize: '15px', lineHeight: 1.6 }}>
-                Already registered? Your spot is saved. Check your email for your QR pass.
+                Already registered? Your spot is saved. Check your email for confirmation.
               </p>
             </div>
             <a
