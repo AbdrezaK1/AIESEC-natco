@@ -1,6 +1,8 @@
 'use client'
 import { ChangeEvent, useState } from 'react'
 
+const REGISTRATION_OPEN = false
+
 const localCommittees = ['LC Babez', 'LC Benak', 'LC Bejaia', 'LC Blida', 'LC Constantine', 'LC Tlemcen', 'LC Oran','OE Batna','OE Sidi Bel abbes']
 const departments = ['MX', 'BD', 'MKT', 'FL', 'OGX', 'PM&IGV']
 const positions = ['Member (newbie)', 'Member (oldie)', 'MM', 'LCVP', 'LCP', 'EST', 'Alumni']
@@ -350,6 +352,66 @@ export default function SeatPage() {
 
   const errorText = (key: keyof FormState) =>
     errors[key] ? <p style={{ color: '#b23e23', fontSize: '12px', marginTop: '6px', fontWeight: 700 }}>{errors[key]}</p> : null
+
+  if (!REGISTRATION_OPEN) {
+    return (
+      <div style={{ minHeight: '100vh', paddingTop: '88px', paddingBottom: '64px', background: 'var(--site-jungle-background)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{
+          maxWidth: '620px',
+          width: '100%',
+          margin: '0 24px',
+          background: 'radial-gradient(circle at top, rgba(255,255,255,0.42), transparent 28%), linear-gradient(180deg, var(--quest-parchment, #fff4d1) 0%, #ead39a 100%)',
+          border: '6px solid #4c230f',
+          boxShadow: 'inset 0 0 0 3px rgba(255, 232, 128, 0.36), 0 24px 44px rgba(44, 24, 10, 0.24)',
+          borderRadius: '28px',
+          padding: '48px 36px',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', inset: '16px', border: '2px dashed rgba(107,61,28,0.18)', borderRadius: '20px', pointerEvents: 'none' }} />
+          <div style={{ position: 'relative' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🏕️</div>
+            <p style={{ color: '#7b5528', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700, marginBottom: '12px' }}>
+              Registration Status
+            </p>
+            <h1 style={{ fontFamily: 'Cinzel, Georgia, serif', color: '#4d2d16', fontSize: 'clamp(28px, 6vw, 44px)', lineHeight: 1.1, marginBottom: '20px' }}>
+              Round 1 is Closed
+            </h1>
+            <p style={{ color: '#5f4930', fontSize: '17px', lineHeight: 1.8, marginBottom: '28px' }}>
+              The first wave of adventurers has secured their spots. Round 2 registration is coming — stay tuned and come back soon.
+            </p>
+            <div style={{ background: 'rgba(255,212,45,0.22)', border: '3px solid rgba(106,52,22,0.2)', borderRadius: '18px', padding: '16px 20px', marginBottom: '28px' }}>
+              <p style={{ color: '#6a3416', fontWeight: 700, fontSize: '15px', lineHeight: 1.6 }}>
+                Already registered? Your spot is saved. Check your email for your QR pass.
+              </p>
+            </div>
+            <a
+              href="/"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '14px 32px',
+                borderRadius: '999px',
+                background: 'linear-gradient(180deg, #ffd72f, #e7a81d)',
+                border: '3px solid #6a3416',
+                boxShadow: '0 6px 0 #8c521c',
+                color: '#4c250f',
+                fontSize: '14px',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+              }}
+            >
+              Back to Camp
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const isAlumni = form.position === 'Alumni'
   const conferenceFee = !form.comingFor ? 0

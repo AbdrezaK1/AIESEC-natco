@@ -22,6 +22,10 @@ function doPost(e) {
       return handleCheckin(data)
     }
 
+    if (data.action === 'uploadAssets') {
+      return handleUploadAssets(data)
+    }
+
     const sheet = getReservationsSheet()
     const pictureResult = savePicture(data)
     const qrResult = saveQrPass(data)
@@ -52,7 +56,46 @@ function doPost(e) {
       data.feeAgreement ? 'Yes' : 'No',
       data.createdAt || '',
       qrResult.url || qrResult.error || '',
+      data.goodieTshirt || 'No',
+      data.goodieTshirtSize || '',
+      data.goodiePack || 'No pack',
+      data.goodiesTotal || '0',
+      data.goodieBadge || 'No',
+      data.goodieBadgeQuantity || '',
+      data.goodieWristband || 'No',
+      data.goodieWristbandQuantity || '',
+      data.goodieCap || 'No',
+      data.goodieCapQuantity || '',
     ])
+
+    return jsonResponse({
+      success: true,
+      pictureUploaded: Boolean(pictureResult.url),
+      pictureError: pictureResult.error || '',
+      qrPassUploaded: Boolean(qrResult.url),
+      qrPassError: qrResult.error || '',
+    })
+  } catch (error) {
+    return jsonResponse({ success: false, error: String(error && error.message ? error.message : error) })
+  }
+}
+
+function handleUploadAssets(data) {
+  try {
+    const pictureResult = savePicture(data)
+    const qrResult = saveQrPass(data)
+
+    if (data.id) {
+      const sheet = getReservationsSheet()
+      const values = sheet.getDataRange().getValues()
+      for (let i = values.length - 1; i >= 1; i--) {
+        if (String(values[i][1]).trim() === String(data.id).trim()) {
+          if (pictureResult.url) sheet.getRange(i + 1, 12).setValue(pictureResult.url)
+          if (qrResult.url) sheet.getRange(i + 1, 25).setValue(qrResult.url)
+          break
+        }
+      }
+    }
 
     return jsonResponse({
       success: true,
@@ -283,8 +326,7 @@ function getRegistrationStats() {
   })
 
   rows.forEach(function (row) {
-    let lc = String(row[12] || '').trim()
-    if (lc === 'LC Tlemen') lc = 'LC Tlemcen'
+    const lc = String(row[12] || '').trim()
     if (lc) counts[lc] = (counts[lc] || 0) + 1
   })
 
