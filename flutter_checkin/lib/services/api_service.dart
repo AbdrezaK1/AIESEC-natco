@@ -44,6 +44,7 @@ class ApiService {
 
   static Future<void> recordCheckin({
     required String delegateId,
+    required String delegateName,
     required String eventId,
     required String eventName,
     required String organizer,
@@ -56,6 +57,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'delegateId': delegateId,
+        'delegateName': delegateName,
         'eventId': eventId,
         'eventName': eventName,
         'organizer': organizer,

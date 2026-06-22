@@ -115,6 +115,7 @@ function handleCheckin(data) {
     sheet.appendRow([
       new Date(),
       data.delegateId || '',
+      data.delegateName || '',
       data.eventId || '',
       data.eventName || '',
       data.organizer || '',
@@ -364,7 +365,7 @@ function getCheckInsSheet() {
 
   if (!sheet) {
     sheet = spreadsheet.insertSheet(CHECKINS_SHEET_NAME)
-    sheet.appendRow(['Recorded At', 'Delegate ID', 'Event ID', 'Event Name', 'Organizer', 'Checked In At'])
+    sheet.appendRow(['Recorded At', 'Delegate ID', 'Delegate Name', 'Event ID', 'Event Name', 'Organizer', 'Checked In At'])
   }
 
   return sheet

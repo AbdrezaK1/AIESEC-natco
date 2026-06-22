@@ -105,7 +105,7 @@ class _EventTile extends StatelessWidget {
           trailing: Icon(Icons.qr_code_scanner, color: event.color),
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ScannerScreen(event: event)),
+            MaterialPageRoute(builder: (_) => ScannerScreen(event: event, organizer: 'Organizer')),
           ),
         ),
       ),

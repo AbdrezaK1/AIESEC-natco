@@ -4,7 +4,7 @@ const WEBHOOK_URL = process.env.GOOGLE_SHEETS_WEBHOOK_URL!
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { delegateId, eventId, eventName, organizer } = body
+  const { delegateId, delegateName, eventId, eventName, organizer } = body
 
   if (!delegateId || !eventId) {
     return NextResponse.json({ error: 'Missing delegateId or eventId' }, { status: 400 })
@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({
       action: 'checkin',
       delegateId,
+      delegateName: delegateName ?? '',
       eventId,
       eventName: eventName ?? eventId,
       organizer: organizer ?? 'Unknown',
