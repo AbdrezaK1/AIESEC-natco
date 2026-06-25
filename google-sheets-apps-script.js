@@ -220,7 +220,7 @@ function handleLookup(delegateId, eventId) {
       for (let i = 1; i < ciData.length; i++) {
         if (
           String(ciData[i][1]).trim() === String(delegateId).trim() &&
-          String(ciData[i][2]).trim() === String(eventId).trim()
+          String(ciData[i][3]).trim() === String(eventId).trim()
         ) {
           alreadyCheckedIn = true
           break

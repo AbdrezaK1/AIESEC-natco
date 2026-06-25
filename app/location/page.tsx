@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AgendaSection from './AgendaSection'
 
 
 
@@ -111,19 +112,9 @@ export default function LocationPage() {
         </section>
 
         
-        <section id="schedule" className="board-panel animate-in" style={{ padding: '26px', scrollMarginTop: '120px' }}>
+        <section className="board-panel animate-in" style={{ padding: '28px' }}>
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <p className="section-kicker" style={{ marginBottom: '10px' }}>
-              Schedule
-            </p>
-            <div className="metric-card" style={{ padding: '28px', textAlign: 'center' }}>
-              <p className="board-title" style={{ fontSize: 'clamp(28px, 4vw, 42px)', marginBottom: '12px' }}>
-                The conference schedule will be shared after.
-              </p>
-              <p style={{ color: '#5f4930', fontSize: '15px', lineHeight: 1.8, maxWidth: '620px', margin: '0 auto' }}>
-                Keep this checkpoint open. Once the final flow is ready, the full timeline will appear here.
-              </p>
-            </div>
+            <AgendaSection />
           </div>
         </section>
       </div>
